@@ -14,12 +14,8 @@ import (
 // The first template should always be frps.
 func (f *Framework) RunProcesses(serverTemplates []string, clientTemplates []string) ([]*process.Process, []*process.Process) {
 	templates := make([]string, 0, len(serverTemplates)+len(clientTemplates))
-	for _, t := range serverTemplates {
-		templates = append(templates, t)
-	}
-	for _, t := range clientTemplates {
-		templates = append(templates, t)
-	}
+	templates = append(templates, serverTemplates...)
+	templates = append(templates, clientTemplates...)
 	outs, ports, err := f.RenderTemplates(templates)
 	ExpectNoError(err)
 	ExpectTrue(len(templates) > 0)
@@ -31,7 +27,7 @@ func (f *Framework) RunProcesses(serverTemplates []string, clientTemplates []str
 	currentServerProcesses := make([]*process.Process, 0, len(serverTemplates))
 	for i := range serverTemplates {
 		path := filepath.Join(f.TempDirectory, fmt.Sprintf("frp-e2e-server-%d", i))
-		err = os.WriteFile(path, []byte(outs[i]), 0666)
+		err = os.WriteFile(path, []byte(outs[i]), 0o666)
 		ExpectNoError(err)
 		flog.Trace("[%s] %s", path, outs[i])
 
@@ -42,13 +38,13 @@ func (f *Framework) RunProcesses(serverTemplates []string, clientTemplates []str
 		err = p.Start()
 		ExpectNoError(err)
 	}
-	time.Sleep(time.Second)
+	time.Sleep(2 * time.Second)
 
 	currentClientProcesses := make([]*process.Process, 0, len(clientTemplates))
 	for i := range clientTemplates {
 		index := i + len(serverTemplates)
 		path := filepath.Join(f.TempDirectory, fmt.Sprintf("frp-e2e-client-%d", i))
-		err = os.WriteFile(path, []byte(outs[index]), 0666)
+		err = os.WriteFile(path, []byte(outs[index]), 0o666)
 		ExpectNoError(err)
 		flog.Trace("[%s] %s", path, outs[index])
 
@@ -60,7 +56,7 @@ func (f *Framework) RunProcesses(serverTemplates []string, clientTemplates []str
 		ExpectNoError(err)
 		time.Sleep(500 * time.Millisecond)
 	}
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(5 * time.Second)
 
 	return currentServerProcesses, currentClientProcesses
 }
@@ -73,7 +69,7 @@ func (f *Framework) RunFrps(args ...string) (*process.Process, string, error) {
 		return p, p.StdOutput(), err
 	}
 	// sleep for a while to get std output
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(time.Second)
 	return p, p.StdOutput(), nil
 }
 
@@ -84,14 +80,14 @@ func (f *Framework) RunFrpc(args ...string) (*process.Process, string, error) {
 	if err != nil {
 		return p, p.StdOutput(), err
 	}
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(time.Second)
 	return p, p.StdOutput(), nil
 }
 
 func (f *Framework) GenerateConfigFile(content string) string {
 	f.configFileIndex++
 	path := filepath.Join(f.TempDirectory, fmt.Sprintf("frp-e2e-config-%d", f.configFileIndex))
-	err := os.WriteFile(path, []byte(content), 0666)
+	err := os.WriteFile(path, []byte(content), 0o666)
 	ExpectNoError(err)
 	return path
 }

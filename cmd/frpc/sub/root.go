@@ -28,6 +28,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/spf13/cobra"
+
 	"github.com/fatedier/frp/client"
 	"github.com/fatedier/frp/pkg/auth"
 	"github.com/fatedier/frp/pkg/config"
@@ -57,24 +59,26 @@ var (
 	logMaxDays      int
 	disableLogColor bool
 
-	proxyName         string
-	localIP           string
-	localPort         int
-	remotePort        int
-	useEncryption     bool
-	useCompression    bool
-	customDomains     string
-	subDomain         string
-	httpUser          string
-	httpPwd           string
-	locations         string
-	hostHeaderRewrite string
-	role              string
-	sk                string
-	multiplexer       string
-	serverName        string
-	bindAddr          string
-	bindPort          int
+	proxyName          string
+	localIP            string
+	localPort          int
+	remotePort         int
+	useEncryption      bool
+	useCompression     bool
+	bandwidthLimit     string
+	bandwidthLimitMode string
+	customDomains      string
+	subDomain          string
+	httpUser           string
+	httpPwd            string
+	locations          string
+	hostHeaderRewrite  string
+	role               string
+	sk                 string
+	multiplexer        string
+	serverName         string
+	bindAddr           string
+	bindPort           int
 
 	tlsEnable bool
 )
@@ -110,7 +114,7 @@ var rootCmd = &cobra.Command{
 		// Note that it's only designed for testing. It's not guaranteed to be stable.
 		if cfgDir != "" {
 			var wg sync.WaitGroup
-			filepath.WalkDir(cfgDir, func(path string, d fs.DirEntry, err error) error {
+			_ = filepath.WalkDir(cfgDir, func(path string, d fs.DirEntry, err error) error {
 				if err != nil {
 					return nil
 				}
@@ -228,7 +232,7 @@ func parseClientCommonCfgFromCmd() (cfg config.ClientCommonConf, err error) {
 
 	cfg.Complete()
 	if err = cfg.Validate(); err != nil {
-		err = fmt.Errorf("Parse config error: %v", err)
+		err = fmt.Errorf("parse config error: %v", err)
 		return
 	}
 	return
@@ -248,7 +252,6 @@ func startService(
 	visitorCfgs map[string]config.VisitorConf,
 	cfgFile string,
 ) (err error) {
-
 	log.InitLog(cfg.LogWay, cfg.LogFile, cfg.LogLevel,
 		cfg.LogMaxDays, cfg.DisableLogColor)
 
@@ -263,15 +266,16 @@ func startService(
 	}
 	service = svr
 
-	kcpDoneCh := make(chan struct{})
-	// Capture the exit signal if we use kcp.
-	if cfg.Protocol == "kcp" {
-		go handleSignal(svr, kcpDoneCh)
+	closedDoneCh := make(chan struct{})
+	shouldGracefulClose := cfg.Protocol == "kcp" || cfg.Protocol == "quic"
+	// Capture the exit signal if we use kcp or quic.
+	if shouldGracefulClose {
+		go handleSignal(svr, closedDoneCh)
 	}
 
-	err = svr.Run(cmd)
-	if err == nil && cfg.Protocol == "kcp" {
-		<-kcpDoneCh
+	err = svr.Run()
+	if err == nil && shouldGracefulClose {
+		<-closedDoneCh
 	}
 	return
 }

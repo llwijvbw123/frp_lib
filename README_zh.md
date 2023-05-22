@@ -7,31 +7,18 @@
 
 frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。
 
-<h3 align="center">Platinum Sponsors</h3>
-<!--platinum sponsors start-->
-
-<p align="center">
-  <a href="https://www.doppler.com/?utm_campaign=github_repo&utm_medium=referral&utm_content=frp&utm_source=github" target="_blank">
-    <img width="400px" src="https://raw.githubusercontent.com/fatedier/frp/dev/doc/pic/sponsor_doppler.png">
-  </a>
-</p>
-
-<!--platinum sponsors end-->
-
 <h3 align="center">Gold Sponsors</h3>
 <!--gold sponsors start-->
-
 <p align="center">
   <a href="https://workos.com/?utm_campaign=github_repo&utm_medium=referral&utm_content=frp&utm_source=github" target="_blank">
-    <img width="300px" src="https://raw.githubusercontent.com/fatedier/frp/dev/doc/pic/sponsor_workos.png">
+    <img width="350px" src="https://raw.githubusercontent.com/fatedier/frp/dev/doc/pic/sponsor_workos.png">
+  </a>
+  <a>&nbsp</a>
+  <a href="https://asocks.com/c/vDu6Dk" target="_blank">
+    <img width="350px" src="https://raw.githubusercontent.com/fatedier/frp/dev/doc/pic/sponsor_asocks.jpg">
   </a>
 </p>
-
 <!--gold sponsors end-->
-
-<h3 align="center">Silver Sponsors</h3>
-
-* Sakura Frp - 欢迎点击 "加入我们"
 
 ## 为什么使用 frp ？
 

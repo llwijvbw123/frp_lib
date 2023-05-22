@@ -9,12 +9,11 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/onsi/ginkgo/v2"
+
 	"github.com/fatedier/frp/test/e2e/mock/server"
 	"github.com/fatedier/frp/test/e2e/pkg/port"
 	"github.com/fatedier/frp/test/e2e/pkg/process"
-
-	"github.com/onsi/ginkgo"
-	"github.com/onsi/ginkgo/config"
 )
 
 type Options struct {
@@ -63,9 +62,10 @@ type Framework struct {
 }
 
 func NewDefaultFramework() *Framework {
+	suiteConfig, _ := ginkgo.GinkgoConfiguration()
 	options := Options{
-		TotalParallelNode: config.GinkgoConfig.ParallelTotal,
-		CurrentNodeIndex:  config.GinkgoConfig.ParallelNode,
+		TotalParallelNode: suiteConfig.ParallelTotal,
+		CurrentNodeIndex:  suiteConfig.ParallelProcess,
 		FromPortIndex:     20000,
 		ToPortIndex:       50000,
 	}
@@ -102,7 +102,8 @@ func (f *Framework) BeforeEach() {
 	for k, v := range params {
 		switch t := v.(type) {
 		case int:
-			f.usedPorts[k] = int(t)
+			f.usedPorts[k] = t
+		default:
 		}
 	}
 }
@@ -116,14 +117,14 @@ func (f *Framework) AfterEach() {
 
 	// stop processor
 	for _, p := range f.serverProcesses {
-		p.Stop()
+		_ = p.Stop()
 		if TestContext.Debug {
 			fmt.Println(p.ErrorOutput())
 			fmt.Println(p.StdOutput())
 		}
 	}
 	for _, p := range f.clientProcesses {
-		p.Stop()
+		_ = p.Stop()
 		if TestContext.Debug {
 			fmt.Println(p.ErrorOutput())
 			fmt.Println(p.StdOutput())
@@ -259,7 +260,7 @@ func (f *Framework) SetEnvs(envs []string) {
 
 func (f *Framework) WriteTempFile(name string, content string) string {
 	filePath := filepath.Join(f.TempDirectory, name)
-	err := os.WriteFile(filePath, []byte(content), 0766)
+	err := os.WriteFile(filePath, []byte(content), 0o766)
 	ExpectNoError(err)
 	return filePath
 }

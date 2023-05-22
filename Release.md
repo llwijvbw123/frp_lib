@@ -1,7 +1,8 @@
 ### New
 
-* Added new parameter `config_dir` in frpc to run multiple client instances in one process.
+* The `httpconnect` type in `tcpmux` now supports authentication through the parameters `http_user` and `http_pwd`.
 
-### Fix
+### Improved
 
-* Equal sign in environment variables causes parsing error.
+* The web framework has been upgraded to vue3 + element-plus, and the dashboard has added some information display and supports dark mode.
+* The e2e testing has been switched to ginkgo v2.
