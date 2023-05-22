@@ -16,7 +16,6 @@ package client
 
 import (
 	"context"
-	"crypto/tls"
 	"github.com/fatedier/frp/pkg/util/log"
 	"io"
 	"net"
@@ -345,22 +344,21 @@ func (ctl *Control) worker() {
 	go ctl.reader()
 	go ctl.writer()
 
-	select {
-	case <-ctl.closedCh:
-		// close related channels and wait until other goroutines done
-		close(ctl.readCh)
-		if ctl.readerShutdown != nil {
-			ctl.readerShutdown.WaitDone()
-		}
+	<-ctl.closedCh
+	// close related channels and wait until other goroutines done
+	close(ctl.readCh)
+	if ctl.readerShutdown != nil {
+		ctl.readerShutdown.WaitDone()
+	}
 
-		if ctl.msgHandlerShutdown != nil {
-			ctl.msgHandlerShutdown.WaitDone()
-		}
+	if ctl.msgHandlerShutdown != nil {
+		ctl.msgHandlerShutdown.WaitDone()
+	}
 
-		close(ctl.sendCh)
-		if ctl.writerShutdown != nil {
-			ctl.writerShutdown.WaitDone()
-		}
+	close(ctl.sendCh)
+	if ctl.writerShutdown != nil {
+		ctl.writerShutdown.WaitDone()
+	}
 
 	ctl.pm.Close()
 	ctl.vm.Close()

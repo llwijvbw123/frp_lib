@@ -36,8 +36,6 @@ import (
 	"github.com/fatedier/frp/pkg/util/log"
 	"github.com/fatedier/frp/pkg/util/version"
 	"github.com/fatedier/golib/crypto"
-
-	"github.com/spf13/cobra"
 )
 
 const (
@@ -273,7 +271,7 @@ func startService(
 		go handleSignal(svr, closedDoneCh)
 	}
 
-	err = svr.Run()
+	err = svr.Run(cmd)
 	if err == nil && shouldGracefulClose {
 		<-closedDoneCh
 	}
