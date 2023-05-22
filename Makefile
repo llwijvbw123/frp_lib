@@ -4,7 +4,7 @@ LDFLAGS := -s -w
 
 all: fmt build
 
-build: frps frpc
+build: frpc-lib-dll
 
 # compile assets into binary file
 file:
@@ -27,6 +27,14 @@ frps:
 
 frpc:
 	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/frpc ./cmd/frpc
+	
+frpc-lib-static:
+	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-archive -o bin/ ./cmd/libfrpc
+
+frpc-lib-dll:
+	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/frpc.dll ./cmd/libfrpc
+	cmd /C dll2lib.bat 64 bin/frpc.dll
+	mv frpc.lib bin/frpc.lib
 
 test: gotest
 

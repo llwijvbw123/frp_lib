@@ -2,11 +2,20 @@ package main
 
 /*
 #include <stdio.h>
+
+#ifndef DllExport
+#ifdef WIN32
+#define DllExport __declspec( dllexport )
+#else //!WIN32
+#define DllExport
+#endif //WIN32
+#endif //DllExport
+
 typedef void (*LogListener)(const char* log);
 
 LogListener logListener;
 
-void setLogListener(LogListener l) {
+DllExport void setLogListener(LogListener l) {
 	logListener = l;
 }
 
@@ -31,22 +40,22 @@ import (
 	"github.com/fatedier/frp/pkg/util/log"
 )
 
-var l logForMacListener
+var l logForLibListener
 
-type logForMacListener struct {
+type logForLibListener struct {
 	log.LogListener
 }
 
-func (l *logForMacListener) Log(log string) {
+func (l *logForLibListener) Log(log string) {
 	C.callback(C.CString(log))
 }
-func (l *logForMacListener) Location() string {
+func (l *logForLibListener) Location() string {
 	location, _ := time.LoadLocation("Local")
 	return location.String()
 }
 
 func init() {
-	l = logForMacListener{}
+	l = logForLibListener{}
 	log.AppendListener(&l)
 }
 
