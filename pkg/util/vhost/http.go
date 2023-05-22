@@ -31,8 +31,8 @@ import (
 	frpIo "github.com/fatedier/golib/io"
 	"github.com/fatedier/golib/pool"
 
-	frpLog "github.com/fatedier/frp/pkg/util/log"
-	"github.com/fatedier/frp/pkg/util/util"
+	frpLog "github.com/Bellegar/frp_lib/pkg/util/log"
+	"github.com/Bellegar/frp_lib/pkg/util/util"
 )
 
 var ErrNoRouteFound = errors.New("no route found")

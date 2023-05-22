@@ -21,9 +21,9 @@ import (
 
 	"github.com/fatedier/golib/errors"
 
-	"github.com/fatedier/frp/pkg/util/log"
-	frpNet "github.com/fatedier/frp/pkg/util/net"
-	"github.com/fatedier/frp/pkg/util/xlog"
+	"github.com/Bellegar/frp_lib/pkg/util/log"
+	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
+	"github.com/Bellegar/frp_lib/pkg/util/xlog"
 )
 
 type RouteInfo string

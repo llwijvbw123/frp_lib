@@ -37,7 +37,7 @@ import "C"
 import (
 	"time"
 
-	"github.com/fatedier/frp/pkg/util/log"
+	"github.com/Bellegar/frp_lib/pkg/util/log"
 )
 
 var l logForLibListener

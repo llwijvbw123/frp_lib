@@ -7,11 +7,11 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"github.com/fatedier/frp/test/e2e/framework"
-	"github.com/fatedier/frp/test/e2e/framework/consts"
-	"github.com/fatedier/frp/test/e2e/pkg/port"
-	"github.com/fatedier/frp/test/e2e/pkg/request"
-	clientsdk "github.com/fatedier/frp/test/e2e/pkg/sdk/client"
+	"github.com/Bellegar/frp_lib/test/e2e/framework"
+	"github.com/Bellegar/frp_lib/test/e2e/framework/consts"
+	"github.com/Bellegar/frp_lib/test/e2e/pkg/port"
+	"github.com/Bellegar/frp_lib/test/e2e/pkg/request"
+	clientsdk "github.com/Bellegar/frp_lib/test/e2e/pkg/sdk/client"
 )
 
 var _ = ginkgo.Describe("[Feature: Server Manager]", func() {

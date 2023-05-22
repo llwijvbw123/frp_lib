@@ -20,8 +20,8 @@ import (
 	"github.com/fatedier/golib/errors"
 	"golang.org/x/time/rate"
 
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/msg"
+	"github.com/Bellegar/frp_lib/pkg/config"
+	"github.com/Bellegar/frp_lib/pkg/msg"
 )
 
 type XTCPProxy struct {

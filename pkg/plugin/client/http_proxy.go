@@ -25,7 +25,7 @@ import (
 	frpIo "github.com/fatedier/golib/io"
 	gnet "github.com/fatedier/golib/net"
 
-	frpNet "github.com/fatedier/frp/pkg/util/net"
+	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
 )
 
 const PluginHTTPProxy = "http_proxy"

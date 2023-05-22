@@ -19,8 +19,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/fatedier/frp/pkg/auth"
-	plugin "github.com/fatedier/frp/pkg/plugin/server"
+	"github.com/Bellegar/frp_lib/pkg/auth"
+	plugin "github.com/Bellegar/frp_lib/pkg/plugin/server"
 )
 
 func Test_LoadServerCommonConf(t *testing.T) {

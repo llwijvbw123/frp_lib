@@ -26,12 +26,12 @@ import (
 	frpIo "github.com/fatedier/golib/io"
 	"golang.org/x/time/rate"
 
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/msg"
-	"github.com/fatedier/frp/pkg/proto/udp"
-	"github.com/fatedier/frp/pkg/util/limit"
-	frpNet "github.com/fatedier/frp/pkg/util/net"
-	"github.com/fatedier/frp/server/metrics"
+	"github.com/Bellegar/frp_lib/pkg/config"
+	"github.com/Bellegar/frp_lib/pkg/msg"
+	"github.com/Bellegar/frp_lib/pkg/proto/udp"
+	"github.com/Bellegar/frp_lib/pkg/util/limit"
+	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
+	"github.com/Bellegar/frp_lib/server/metrics"
 )
 
 type UDPProxy struct {

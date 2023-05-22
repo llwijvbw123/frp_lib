@@ -16,7 +16,7 @@ package client
 
 import (
 	"context"
-	"github.com/fatedier/frp/pkg/util/log"
+	"github.com/Bellegar/frp_lib/pkg/util/log"
 	"io"
 	"net"
 	"runtime/debug"
@@ -25,11 +25,11 @@ import (
 	"github.com/fatedier/golib/control/shutdown"
 	"github.com/fatedier/golib/crypto"
 
-	"github.com/fatedier/frp/client/proxy"
-	"github.com/fatedier/frp/pkg/auth"
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/msg"
-	"github.com/fatedier/frp/pkg/util/xlog"
+	"github.com/Bellegar/frp_lib/client/proxy"
+	"github.com/Bellegar/frp_lib/pkg/auth"
+	"github.com/Bellegar/frp_lib/pkg/config"
+	"github.com/Bellegar/frp_lib/pkg/msg"
+	"github.com/Bellegar/frp_lib/pkg/util/xlog"
 )
 
 type Control struct {

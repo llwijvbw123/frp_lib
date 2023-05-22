@@ -25,10 +25,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/fatedier/frp/client/proxy"
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/util/log"
-	"github.com/fatedier/frp/pkg/util/util"
+	"github.com/Bellegar/frp_lib/client/proxy"
+	"github.com/Bellegar/frp_lib/pkg/config"
+	"github.com/Bellegar/frp_lib/pkg/util/log"
+	"github.com/Bellegar/frp_lib/pkg/util/util"
 )
 
 type GeneralResponse struct {

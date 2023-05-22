@@ -15,9 +15,9 @@
 package frp
 
 import (
-	"github.com/fatedier/frp/cmd/frpc/sub"
-	"github.com/fatedier/frp/cmd/frps/frps"
-	"github.com/fatedier/frp/pkg/util/version"
+	"github.com/Bellegar/frp_lib/cmd/frpc/sub"
+	"github.com/Bellegar/frp_lib/cmd/frps/frps"
+	"github.com/Bellegar/frp_lib/pkg/util/version"
 	"github.com/fatedier/golib/crypto"
 	"runtime/debug"
 )

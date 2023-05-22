@@ -32,13 +32,13 @@ import (
 	pp "github.com/pires/go-proxyproto"
 	"golang.org/x/time/rate"
 
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/msg"
-	plugin "github.com/fatedier/frp/pkg/plugin/client"
-	"github.com/fatedier/frp/pkg/proto/udp"
-	"github.com/fatedier/frp/pkg/util/limit"
-	frpNet "github.com/fatedier/frp/pkg/util/net"
-	"github.com/fatedier/frp/pkg/util/xlog"
+	"github.com/Bellegar/frp_lib/pkg/config"
+	"github.com/Bellegar/frp_lib/pkg/msg"
+	plugin "github.com/Bellegar/frp_lib/pkg/plugin/client"
+	"github.com/Bellegar/frp_lib/pkg/proto/udp"
+	"github.com/Bellegar/frp_lib/pkg/util/limit"
+	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
+	"github.com/Bellegar/frp_lib/pkg/util/xlog"
 )
 
 // Proxy defines how to handle work connections for different proxy type.

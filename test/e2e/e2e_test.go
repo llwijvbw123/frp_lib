@@ -8,12 +8,12 @@ import (
 
 	_ "github.com/onsi/ginkgo/v2"
 
-	"github.com/fatedier/frp/pkg/util/log"
+	"github.com/Bellegar/frp_lib/pkg/util/log"
 	// test source
-	_ "github.com/fatedier/frp/test/e2e/basic"
-	_ "github.com/fatedier/frp/test/e2e/features"
-	"github.com/fatedier/frp/test/e2e/framework"
-	_ "github.com/fatedier/frp/test/e2e/plugin"
+	_ "github.com/Bellegar/frp_lib/test/e2e/basic"
+	_ "github.com/Bellegar/frp_lib/test/e2e/features"
+	"github.com/Bellegar/frp_lib/test/e2e/framework"
+	_ "github.com/Bellegar/frp_lib/test/e2e/plugin"
 )
 
 // handleFlags sets up all flags and parses the command line.

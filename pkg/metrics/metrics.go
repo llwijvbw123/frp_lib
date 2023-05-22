@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	"github.com/fatedier/frp/pkg/metrics/aggregate"
+	"github.com/Bellegar/frp_lib/pkg/metrics/aggregate"
 )
 
 var (

@@ -1,8 +1,8 @@
 
 # frp
 
-[![Build Status](https://circleci.com/gh/fatedier/frp.svg?style=shield)](https://circleci.com/gh/fatedier/frp)
-[![GitHub release](https://img.shields.io/github/tag/fatedier/frp.svg?label=release)](https://github.com/fatedier/frp/releases)
+[![Build Status](https://circleci.com/gh/Bellegar/frp_lib.svg?style=shield)](https://circleci.com/gh/Bellegar/frp_lib)
+[![GitHub release](https://img.shields.io/github/tag/Bellegar/frp_lib.svg?label=release)](https://github.com/Bellegar/frp_lib/releases)
 
 [README](README.md) | [中文文档](README_zh.md)
 
@@ -10,11 +10,11 @@
 <!--gold sponsors start-->
 <p align="center">
   <a href="https://workos.com/?utm_campaign=github_repo&utm_medium=referral&utm_content=frp&utm_source=github" target="_blank">
-    <img width="350px" src="https://raw.githubusercontent.com/fatedier/frp/dev/doc/pic/sponsor_workos.png">
+    <img width="350px" src="https://raw.githubusercontent.com/Bellegar/frp_lib/dev/doc/pic/sponsor_workos.png">
   </a>
   <a>&nbsp</a>
   <a href="https://asocks.com/c/vDu6Dk" target="_blank">
-    <img width="350px" src="https://raw.githubusercontent.com/fatedier/frp/dev/doc/pic/sponsor_asocks.jpg">
+    <img width="350px" src="https://raw.githubusercontent.com/Bellegar/frp_lib/dev/doc/pic/sponsor_asocks.jpg">
   </a>
 </p>
 
@@ -101,7 +101,7 @@ We will transition from version 0 to version 1 at the appropriate time and will 
 
 ## Example Usage
 
-To begin, download the latest program for your operating system and architecture from the [Release](https://github.com/fatedier/frp/releases) page.
+To begin, download the latest program for your operating system and architecture from the [Release](https://github.com/Bellegar/frp_lib/releases) page.
 
 Next, place the `frps` binary and `frps.ini` configuration file on Server A, which has a public IP address.
 
@@ -1126,12 +1126,12 @@ Find more plugins in [gofrp/plugin](https://github.com/gofrp/plugin).
 
 Interested in getting involved? We would like to help you!
 
-* Take a look at our [issues list](https://github.com/fatedier/frp/issues) and consider sending a Pull Request to **dev branch**.
+* Take a look at our [issues list](https://github.com/Bellegar/frp_lib/issues) and consider sending a Pull Request to **dev branch**.
 * If you want to add a new feature, please create an issue first to describe the new feature, as well as the implementation approach. Once a proposal is accepted, create an implementation of the new features and submit it as a pull request.
 * Sorry for my poor English. Improvements for this document are welcome, even some typo fixes.
 * If you have great ideas, send an email to fatedier@gmail.com.
 
-**Note: We prefer you to give your advise in [issues](https://github.com/fatedier/frp/issues), so others with a same question can search it quickly and we don't need to answer them repeatedly.**
+**Note: We prefer you to give your advise in [issues](https://github.com/Bellegar/frp_lib/issues), so others with a same question can search it quickly and we don't need to answer them repeatedly.**
 
 ## Donation
 

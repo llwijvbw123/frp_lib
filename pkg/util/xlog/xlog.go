@@ -15,7 +15,7 @@
 package xlog
 
 import (
-	"github.com/fatedier/frp/pkg/util/log"
+	"github.com/Bellegar/frp_lib/pkg/util/log"
 )
 
 // Logger is not thread safety for operations on prefix

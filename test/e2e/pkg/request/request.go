@@ -14,8 +14,8 @@ import (
 
 	libdial "github.com/fatedier/golib/net/dial"
 
-	"github.com/fatedier/frp/test/e2e/pkg/rpc"
-	"github.com/fatedier/frp/test/e2e/pkg/utils"
+	"github.com/Bellegar/frp_lib/test/e2e/pkg/rpc"
+	"github.com/Bellegar/frp_lib/test/e2e/pkg/utils"
 )
 
 type Request struct {

@@ -22,8 +22,8 @@ import (
 
 	"gopkg.in/ini.v1"
 
-	"github.com/fatedier/frp/pkg/auth"
-	"github.com/fatedier/frp/pkg/util/util"
+	"github.com/Bellegar/frp_lib/pkg/auth"
+	"github.com/Bellegar/frp_lib/pkg/util/util"
 )
 
 // ClientCommonConf contains information for a client service. It is
