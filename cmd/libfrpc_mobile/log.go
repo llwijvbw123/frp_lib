@@ -1,7 +1,7 @@
 package libfrp
 
 import (
-	frpLog "github.com/Bellegar/frp_lib/pkg/util/log"
+	frpLog "frp_lib/pkg/util/log"
 )
 
 type FrpLogListener interface {

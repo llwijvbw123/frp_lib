@@ -5,9 +5,9 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"github.com/Bellegar/frp_lib/test/e2e/framework"
-	"github.com/Bellegar/frp_lib/test/e2e/framework/consts"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/port"
+	"frp_lib/test/e2e/framework"
+	"frp_lib/test/e2e/framework/consts"
+	"frp_lib/test/e2e/pkg/port"
 )
 
 var _ = ginkgo.Describe("[Feature: Config]", func() {

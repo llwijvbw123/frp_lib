@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/port"
+	"frp_lib/test/e2e/pkg/port"
 )
 
 const (

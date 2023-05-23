@@ -21,9 +21,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"gopkg.in/ini.v1"
 
-	"github.com/Bellegar/frp_lib/pkg/auth"
-	plugin "github.com/Bellegar/frp_lib/pkg/plugin/server"
-	"github.com/Bellegar/frp_lib/pkg/util/util"
+	"frp_lib/pkg/auth"
+	plugin "frp_lib/pkg/plugin/server"
+	"frp_lib/pkg/util/util"
 )
 
 // ServerCommonConf contains information for a server service. It is

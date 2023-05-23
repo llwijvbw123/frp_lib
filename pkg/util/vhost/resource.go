@@ -20,8 +20,8 @@ import (
 	"net/http"
 	"os"
 
-	frpLog "github.com/Bellegar/frp_lib/pkg/util/log"
-	"github.com/Bellegar/frp_lib/pkg/util/version"
+	frpLog "frp_lib/pkg/util/log"
+	"frp_lib/pkg/util/version"
 )
 
 var NotFoundPagePath = ""

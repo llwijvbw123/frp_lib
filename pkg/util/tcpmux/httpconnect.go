@@ -24,8 +24,8 @@ import (
 
 	gnet "github.com/fatedier/golib/net"
 
-	"github.com/Bellegar/frp_lib/pkg/util/util"
-	"github.com/Bellegar/frp_lib/pkg/util/vhost"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/vhost"
 )
 
 type HTTPConnectTCPMuxer struct {

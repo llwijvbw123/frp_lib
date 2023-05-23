@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Bellegar/frp_lib/pkg/util/xlog"
+	"frp_lib/pkg/util/xlog"
 )
 
 var ErrHealthCheckType = errors.New("error health check type")

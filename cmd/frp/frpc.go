@@ -1,8 +1,8 @@
 package frp
 
 import (
-	"github.com/Bellegar/frp_lib/client"
-	"github.com/Bellegar/frp_lib/cmd/frpc/sub"
+	"frp_lib/client"
+	"frp_lib/cmd/frpc/sub"
 	"log"
 )
 

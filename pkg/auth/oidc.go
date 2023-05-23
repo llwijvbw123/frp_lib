@@ -21,7 +21,7 @@ import (
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2/clientcredentials"
 
-	"github.com/Bellegar/frp_lib/pkg/msg"
+	"frp_lib/pkg/msg"
 )
 
 type OidcClientConfig struct {

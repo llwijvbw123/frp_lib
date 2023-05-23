@@ -17,7 +17,7 @@ package mem
 import (
 	"time"
 
-	"github.com/Bellegar/frp_lib/pkg/util/metric"
+	"frp_lib/pkg/util/metric"
 )
 
 const (

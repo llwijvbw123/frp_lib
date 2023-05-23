@@ -24,8 +24,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/Bellegar/frp_lib/assets"
-	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
+	"frp_lib/assets"
+	frpNet "frp_lib/pkg/util/net"
 )
 
 var (

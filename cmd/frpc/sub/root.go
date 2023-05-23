@@ -30,11 +30,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Bellegar/frp_lib/client"
-	"github.com/Bellegar/frp_lib/pkg/auth"
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/util/log"
-	"github.com/Bellegar/frp_lib/pkg/util/version"
+	"frp_lib/client"
+	"frp_lib/pkg/auth"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/util/log"
+	"frp_lib/pkg/util/version"
 	"github.com/fatedier/golib/crypto"
 )
 

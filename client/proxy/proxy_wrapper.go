@@ -10,11 +10,11 @@ import (
 
 	"github.com/fatedier/golib/errors"
 
-	"github.com/Bellegar/frp_lib/client/event"
-	"github.com/Bellegar/frp_lib/client/health"
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/msg"
-	"github.com/Bellegar/frp_lib/pkg/util/xlog"
+	"frp_lib/client/event"
+	"frp_lib/client/health"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/util/xlog"
 )
 
 const (

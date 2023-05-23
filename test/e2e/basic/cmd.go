@@ -7,8 +7,8 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"github.com/Bellegar/frp_lib/test/e2e/framework"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/request"
+	"frp_lib/test/e2e/framework"
+	"frp_lib/test/e2e/pkg/request"
 )
 
 const (

@@ -11,9 +11,9 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"github.com/Bellegar/frp_lib/test/e2e/mock/server"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/port"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/process"
+	"frp_lib/test/e2e/mock/server"
+	"frp_lib/test/e2e/pkg/port"
+	"frp_lib/test/e2e/pkg/process"
 )
 
 type Options struct {

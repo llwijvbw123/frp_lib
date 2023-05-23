@@ -24,7 +24,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Bellegar/frp_lib/pkg/config"
+	"frp_lib/pkg/config"
 )
 
 func init() {

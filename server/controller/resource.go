@@ -15,13 +15,13 @@
 package controller
 
 import (
-	"github.com/Bellegar/frp_lib/pkg/nathole"
-	plugin "github.com/Bellegar/frp_lib/pkg/plugin/server"
-	"github.com/Bellegar/frp_lib/pkg/util/tcpmux"
-	"github.com/Bellegar/frp_lib/pkg/util/vhost"
-	"github.com/Bellegar/frp_lib/server/group"
-	"github.com/Bellegar/frp_lib/server/ports"
-	"github.com/Bellegar/frp_lib/server/visitor"
+	"frp_lib/pkg/nathole"
+	plugin "frp_lib/pkg/plugin/server"
+	"frp_lib/pkg/util/tcpmux"
+	"frp_lib/pkg/util/vhost"
+	"frp_lib/server/group"
+	"frp_lib/server/ports"
+	"frp_lib/server/visitor"
 )
 
 // All resource managers and controllers

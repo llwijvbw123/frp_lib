@@ -21,10 +21,10 @@ import (
 
 	"golang.org/x/time/rate"
 
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/consts"
-	"github.com/Bellegar/frp_lib/pkg/util/util"
-	"github.com/Bellegar/frp_lib/pkg/util/vhost"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/consts"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/vhost"
 )
 
 type TCPMuxProxy struct {

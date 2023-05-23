@@ -10,9 +10,9 @@ import (
 	"github.com/fatedier/golib/errors"
 	"github.com/fatedier/golib/pool"
 
-	"github.com/Bellegar/frp_lib/pkg/msg"
-	"github.com/Bellegar/frp_lib/pkg/util/log"
-	"github.com/Bellegar/frp_lib/pkg/util/util"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/util/log"
+	"frp_lib/pkg/util/util"
 )
 
 // NatHoleTimeout seconds.

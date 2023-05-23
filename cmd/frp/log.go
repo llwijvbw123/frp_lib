@@ -1,6 +1,6 @@
 package frp
 
-import "github.com/Bellegar/frp_lib/pkg/util/log"
+import "frp_lib/pkg/util/log"
 
 type FrpLogListener interface {
 	Log(log string)

@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Bellegar/frp_lib/pkg/util/util"
-	"github.com/Bellegar/frp_lib/pkg/util/xlog"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/xlog"
 )
 
 type Manager struct {

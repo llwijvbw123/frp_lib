@@ -33,16 +33,16 @@ import (
 	fmux "github.com/hashicorp/yamux"
 	quic "github.com/quic-go/quic-go"
 
-	"github.com/Bellegar/frp_lib/assets"
-	"github.com/Bellegar/frp_lib/pkg/auth"
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/msg"
-	"github.com/Bellegar/frp_lib/pkg/transport"
-	"github.com/Bellegar/frp_lib/pkg/util/log"
-	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
-	"github.com/Bellegar/frp_lib/pkg/util/util"
-	"github.com/Bellegar/frp_lib/pkg/util/version"
-	"github.com/Bellegar/frp_lib/pkg/util/xlog"
+	"frp_lib/assets"
+	"frp_lib/pkg/auth"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/transport"
+	"frp_lib/pkg/util/log"
+	frpNet "frp_lib/pkg/util/net"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/version"
+	"frp_lib/pkg/util/xlog"
 )
 
 type ServiceClosedListener interface {

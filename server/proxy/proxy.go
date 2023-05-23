@@ -26,14 +26,14 @@ import (
 	frpIo "github.com/fatedier/golib/io"
 	"golang.org/x/time/rate"
 
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/msg"
-	plugin "github.com/Bellegar/frp_lib/pkg/plugin/server"
-	"github.com/Bellegar/frp_lib/pkg/util/limit"
-	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
-	"github.com/Bellegar/frp_lib/pkg/util/xlog"
-	"github.com/Bellegar/frp_lib/server/controller"
-	"github.com/Bellegar/frp_lib/server/metrics"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/msg"
+	plugin "frp_lib/pkg/plugin/server"
+	"frp_lib/pkg/util/limit"
+	frpNet "frp_lib/pkg/util/net"
+	"frp_lib/pkg/util/xlog"
+	"frp_lib/server/controller"
+	"frp_lib/server/metrics"
 )
 
 type GetWorkConnFn func() (net.Conn, error)

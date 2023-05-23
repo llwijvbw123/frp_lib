@@ -21,7 +21,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
+	frpNet "frp_lib/pkg/util/net"
 )
 
 const PluginStaticFile = "static_file"

@@ -21,7 +21,7 @@ import (
 
 	"golang.org/x/time/rate"
 
-	"github.com/Bellegar/frp_lib/pkg/config"
+	"frp_lib/pkg/config"
 )
 
 type TCPProxy struct {

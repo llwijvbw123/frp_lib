@@ -19,8 +19,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/Bellegar/frp_lib/pkg/auth"
-	"github.com/Bellegar/frp_lib/pkg/consts"
+	"frp_lib/pkg/auth"
+	"frp_lib/pkg/consts"
 )
 
 const (

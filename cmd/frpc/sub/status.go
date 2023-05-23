@@ -26,8 +26,8 @@ import (
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 
-	"github.com/Bellegar/frp_lib/client"
-	"github.com/Bellegar/frp_lib/pkg/config"
+	"frp_lib/client"
+	"frp_lib/pkg/config"
 )
 
 func init() {

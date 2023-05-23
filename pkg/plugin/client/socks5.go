@@ -21,7 +21,7 @@ import (
 
 	gosocks5 "github.com/armon/go-socks5"
 
-	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
+	frpNet "frp_lib/pkg/util/net"
 )
 
 const PluginSocks5 = "socks5"

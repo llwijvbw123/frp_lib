@@ -6,10 +6,10 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	plugin "github.com/Bellegar/frp_lib/pkg/plugin/server"
-	"github.com/Bellegar/frp_lib/pkg/transport"
-	"github.com/Bellegar/frp_lib/test/e2e/framework"
-	"github.com/Bellegar/frp_lib/test/e2e/framework/consts"
+	plugin "frp_lib/pkg/plugin/server"
+	"frp_lib/pkg/transport"
+	"frp_lib/test/e2e/framework"
+	"frp_lib/test/e2e/framework/consts"
 )
 
 var _ = ginkgo.Describe("[Feature: Server-Plugins]", func() {

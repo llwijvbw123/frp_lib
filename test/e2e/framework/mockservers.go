@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Bellegar/frp_lib/test/e2e/framework/consts"
-	"github.com/Bellegar/frp_lib/test/e2e/mock/server"
-	"github.com/Bellegar/frp_lib/test/e2e/mock/server/httpserver"
-	"github.com/Bellegar/frp_lib/test/e2e/mock/server/streamserver"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/port"
+	"frp_lib/test/e2e/framework/consts"
+	"frp_lib/test/e2e/mock/server"
+	"frp_lib/test/e2e/mock/server/httpserver"
+	"frp_lib/test/e2e/mock/server/streamserver"
+	"frp_lib/test/e2e/pkg/port"
 )
 
 const (

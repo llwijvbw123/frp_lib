@@ -21,7 +21,7 @@ import (
 
 	gerr "github.com/fatedier/golib/errors"
 
-	"github.com/Bellegar/frp_lib/server/ports"
+	"frp_lib/server/ports"
 )
 
 // TCPGroupCtl manage all TCPGroups

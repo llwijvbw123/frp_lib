@@ -8,11 +8,11 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"github.com/Bellegar/frp_lib/test/e2e/framework"
-	"github.com/Bellegar/frp_lib/test/e2e/framework/consts"
-	"github.com/Bellegar/frp_lib/test/e2e/mock/server/httpserver"
-	"github.com/Bellegar/frp_lib/test/e2e/mock/server/streamserver"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/request"
+	"frp_lib/test/e2e/framework"
+	"frp_lib/test/e2e/framework/consts"
+	"frp_lib/test/e2e/mock/server/httpserver"
+	"frp_lib/test/e2e/mock/server/streamserver"
+	"frp_lib/test/e2e/pkg/request"
 )
 
 var _ = ginkgo.Describe("[Feature: Group]", func() {

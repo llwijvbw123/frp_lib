@@ -23,8 +23,8 @@ import (
 
 	"gopkg.in/ini.v1"
 
-	"github.com/Bellegar/frp_lib/pkg/consts"
-	"github.com/Bellegar/frp_lib/pkg/msg"
+	"frp_lib/pkg/consts"
+	"frp_lib/pkg/msg"
 )
 
 // Proxy

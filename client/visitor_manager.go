@@ -19,8 +19,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/util/xlog"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/util/xlog"
 )
 
 type VisitorManager struct {

@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"net/http"
 
-	flog "github.com/Bellegar/frp_lib/pkg/util/log"
-	"github.com/Bellegar/frp_lib/test/e2e/framework/consts"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/request"
+	flog "frp_lib/pkg/util/log"
+	"frp_lib/test/e2e/framework/consts"
+	"frp_lib/test/e2e/pkg/request"
 )
 
 func SpecifiedHTTPBodyHandler(body []byte) http.HandlerFunc {

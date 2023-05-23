@@ -7,8 +7,8 @@ import (
 	"net"
 	"strconv"
 
-	libnet "github.com/Bellegar/frp_lib/pkg/util/net"
-	"github.com/Bellegar/frp_lib/test/e2e/pkg/rpc"
+	libnet "frp_lib/pkg/util/net"
+	"frp_lib/test/e2e/pkg/rpc"
 )
 
 type Type string

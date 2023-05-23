@@ -29,12 +29,12 @@ import (
 	"github.com/fatedier/golib/pool"
 	fmux "github.com/hashicorp/yamux"
 
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/msg"
-	"github.com/Bellegar/frp_lib/pkg/proto/udp"
-	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
-	"github.com/Bellegar/frp_lib/pkg/util/util"
-	"github.com/Bellegar/frp_lib/pkg/util/xlog"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/proto/udp"
+	frpNet "frp_lib/pkg/util/net"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/xlog"
 )
 
 // Visitor is used for forward traffics from local port tot remote service.

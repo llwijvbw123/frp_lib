@@ -22,9 +22,9 @@ import (
 
 	gerr "github.com/fatedier/golib/errors"
 
-	"github.com/Bellegar/frp_lib/pkg/consts"
-	"github.com/Bellegar/frp_lib/pkg/util/tcpmux"
-	"github.com/Bellegar/frp_lib/pkg/util/vhost"
+	"frp_lib/pkg/consts"
+	"frp_lib/pkg/util/tcpmux"
+	"frp_lib/pkg/util/vhost"
 )
 
 // TCPMuxGroupCtl manage all TCPMuxGroups

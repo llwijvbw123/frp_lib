@@ -17,8 +17,8 @@ extern DllExport void setLogListener(LogListener l);
 import "C"
 
 import (
-	"github.com/Bellegar/frp_lib/cmd/frpc/sub"
-	"github.com/Bellegar/frp_lib/pkg/util/version"
+	"frp_lib/cmd/frpc/sub"
+	"frp_lib/pkg/util/version"
 )
 
 //export StopFrpc

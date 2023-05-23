@@ -22,12 +22,12 @@ import (
 	frpIo "github.com/fatedier/golib/io"
 	"golang.org/x/time/rate"
 
-	"github.com/Bellegar/frp_lib/pkg/config"
-	"github.com/Bellegar/frp_lib/pkg/util/limit"
-	frpNet "github.com/Bellegar/frp_lib/pkg/util/net"
-	"github.com/Bellegar/frp_lib/pkg/util/util"
-	"github.com/Bellegar/frp_lib/pkg/util/vhost"
-	"github.com/Bellegar/frp_lib/server/metrics"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/util/limit"
+	frpNet "frp_lib/pkg/util/net"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/vhost"
+	"frp_lib/server/metrics"
 )
 
 type HTTPProxy struct {

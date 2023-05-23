@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Bellegar/frp_lib/pkg/msg"
-	"github.com/Bellegar/frp_lib/pkg/util/util"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/util/util"
 )
 
 type TokenConfig struct {

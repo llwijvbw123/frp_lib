@@ -15,7 +15,7 @@
 package plugin
 
 import (
-	"github.com/Bellegar/frp_lib/pkg/msg"
+	"frp_lib/pkg/msg"
 )
 
 type Request struct {
