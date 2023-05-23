@@ -1,24 +1,21 @@
 
 # frp
 
-[![Build Status](https://circleci.com/gh/Bellegar/frp_lib.svg?style=shield)](https://circleci.com/gh/Bellegar/frp_lib)
 [![GitHub release](https://img.shields.io/github/tag/Bellegar/frp_lib.svg?label=release)](https://github.com/Bellegar/frp_lib/releases)
 
+## FRP Library
+The universal project for building shared library of FRP library on desktop and mobile platforms.
+Static library also can be build, but in my own FRP-depend windows c++ project execution of function was stucking, so static build does not work currently.
+
+Supported:
+* Windows 32bit (dll + lib, build with mingw32)
+* Windows 64bit (dll + lib, build with mingw64)
+* Android all archs (aar + jar sources)
+* Unix/Linux (not tested)
+* MacOS (not tested)
+* iOS (not tested)
+
 [README](README.md) | [中文文档](README_zh.md)
-
-<h3 align="center">Gold Sponsors</h3>
-<!--gold sponsors start-->
-<p align="center">
-  <a href="https://workos.com/?utm_campaign=github_repo&utm_medium=referral&utm_content=frp&utm_source=github" target="_blank">
-    <img width="350px" src="https://raw.githubusercontent.com/Bellegar/frp_lib/dev/doc/pic/sponsor_workos.png">
-  </a>
-  <a>&nbsp</a>
-  <a href="https://asocks.com/c/vDu6Dk" target="_blank">
-    <img width="350px" src="https://raw.githubusercontent.com/Bellegar/frp_lib/dev/doc/pic/sponsor_asocks.jpg">
-  </a>
-</p>
-
-<!--gold sponsors end-->
 
 ## What is frp?
 
