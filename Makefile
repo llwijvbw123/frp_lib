@@ -40,8 +40,7 @@ frpc-lib-windows64:
 	mv frpc.lib bin/x86_64/frpc.lib
 
 frpc-lib-windows32:
-	export GOARCH=386
-	env GOGCCFLAGS=-m32 CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/x86/frpc.dll ./cmd/libfrpc
+	env GOARCH=386 CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/x86/frpc.dll ./cmd/libfrpc
 	cmd /C dll2lib.bat 32 bin/x86/frpc.dll
 	mv frpc.lib bin/x86/frpc.lib
 
