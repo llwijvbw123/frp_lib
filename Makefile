@@ -48,12 +48,14 @@ frpc-lib-windows32:
 frpc-lib-android:
 	go get golang.org/x/mobile/cmd/gobind
 	go get golang.org/x/mobile/cmd/gomobile
+	mkdir -p bin/android
 	gomobile init
 	gomobile bind -v -o bin/android/libfrp.aar -target=android ./cmd/libfrpc_mobile
 
 frpc-lib-ios:
 	go get golang.org/x/mobile/cmd/gobind
 	go get golang.org/x/mobile/cmd/gomobile
+	mkdir -p bin/ios
 	gomobile init
 	gomobile bind -v -o bin/ios/ -target=ios ./cmd/libfrpc_mobile
 
