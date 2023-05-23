@@ -4,7 +4,7 @@ LDFLAGS := -s -w
 
 all: fmt build
 
-build: frpc-lib-dll
+#build: frpc-lib-dll
 
 # compile assets into binary file
 file:
@@ -27,14 +27,35 @@ frps:
 
 frpc:
 	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/frpc ./cmd/frpc
-	
+
 frpc-lib-static:
 	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-archive -o bin/ ./cmd/libfrpc
 
-frpc-lib-dll:
-	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/frpc.dll ./cmd/libfrpc
-	cmd /C dll2lib.bat 64 bin/frpc.dll
-	mv frpc.lib bin/frpc.lib
+frpc-lib-unix:
+	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/ ./cmd/libfrpc
+
+frpc-lib-windows64:
+	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/x86_64/frpc.dll ./cmd/libfrpc
+	cmd /C dll2lib.bat 64 bin/x86_64/frpc.dll
+	mv frpc.lib bin/x86_64/frpc.lib
+
+frpc-lib-windows32:
+	export GOARCH=386
+	env GOGCCFLAGS=-m32 CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/x86/frpc.dll ./cmd/libfrpc
+	cmd /C dll2lib.bat 32 bin/x86/frpc.dll
+	mv frpc.lib bin/x86/frpc.lib
+
+frpc-lib-android:
+	go get golang.org/x/mobile/cmd/gobind
+	go get golang.org/x/mobile/cmd/gomobile
+	gomobile init
+	gomobile bind -v -o bin/android/libfrp.aar -target=android ./cmd/libfrpc_mobile
+
+frpc-lib-ios:
+	go get golang.org/x/mobile/cmd/gobind
+	go get golang.org/x/mobile/cmd/gomobile
+	gomobile init
+	gomobile bind -v -o bin/ios/ -target=ios ./cmd/libfrpc_mobile
 
 test: gotest
 

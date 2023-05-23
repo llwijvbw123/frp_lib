@@ -201,7 +201,6 @@ func (ctl *Control) GracefulClose(d time.Duration) error {
 	}
 	if ctl.cm != nil {
 		ctl.cm.Close()
-		ctl.cm = nil
 	}
 	return nil
 }
