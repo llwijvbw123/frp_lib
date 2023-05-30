@@ -25,10 +25,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/samber/lo"
 	"frp_lib/client/proxy"
 	"frp_lib/pkg/config"
 	"frp_lib/pkg/util/log"
-	"frp_lib/pkg/util/util"
 )
 
 type GeneralResponse struct {
@@ -90,7 +90,7 @@ func NewProxyStatusResp(status *proxy.WorkingStatus, serverAddr string) ProxySta
 		Status: status.Phase,
 		Err:    status.Err,
 	}
-	baseCfg := status.Cfg.GetBaseInfo()
+	baseCfg := status.Cfg.GetBaseConfig()
 	if baseCfg.LocalPort != 0 {
 		psr.LocalAddr = net.JoinHostPort(baseCfg.LocalIP, strconv.Itoa(baseCfg.LocalPort))
 	}
@@ -98,7 +98,7 @@ func NewProxyStatusResp(status *proxy.WorkingStatus, serverAddr string) ProxySta
 
 	if status.Err == "" {
 		psr.RemoteAddr = status.RemoteAddr
-		if util.InSlice(status.Type, []string{"tcp", "udp"}) {
+		if lo.Contains([]string{"tcp", "udp"}, status.Type) {
 			psr.RemoteAddr = serverAddr + psr.RemoteAddr
 		}
 	}

@@ -39,7 +39,7 @@ import (
 	plugin "frp_lib/pkg/plugin/server"
 	"frp_lib/pkg/transport"
 	"frp_lib/pkg/util/log"
-	frpNet "frp_lib/pkg/util/net"
+	utilnet "frp_lib/pkg/util/net"
 	"frp_lib/pkg/util/tcpmux"
 	"frp_lib/pkg/util/util"
 	"frp_lib/pkg/util/version"
@@ -105,6 +105,11 @@ type Service struct {
 	tlsConfig *tls.Config
 
 	cfg config.ServerCommonConf
+
+	// service context
+	ctx context.Context
+	// call cancel to stop service
+	cancel context.CancelFunc
 }
 
 func NewService(cfg config.ServerCommonConf) (svr *Service, err error) {
@@ -116,6 +121,7 @@ func NewService(cfg config.ServerCommonConf) (svr *Service, err error) {
 		return
 	}
 
+	ctx, cancel := context.WithCancel(context.Background())
 	svr = &Service{
 		ctlManager:    NewControlManager(),
 		pxyManager:    proxy.NewManager(),
@@ -131,6 +137,8 @@ func NewService(cfg config.ServerCommonConf) (svr *Service, err error) {
 		authVerifier:    auth.NewAuthVerifier(cfg.ServerConfig),
 		tlsConfig:       tlsConfig,
 		cfg:             cfg,
+		ctx:             ctx,
+		cancel:          cancel,
 	}
 
 	// Create tcpmux httpconnect multiplexer.
@@ -210,7 +218,7 @@ func NewService(cfg config.ServerCommonConf) (svr *Service, err error) {
 	// Listen for accepting connections from client using kcp protocol.
 	if cfg.KCPBindPort > 0 {
 		address := net.JoinHostPort(cfg.BindAddr, strconv.Itoa(cfg.KCPBindPort))
-		svr.kcpListener, err = frpNet.ListenKcp(address)
+		svr.kcpListener, err = utilnet.ListenKcp(address)
 		if err != nil {
 			err = fmt.Errorf("listen on kcp udp address %s error: %v", address, err)
 			return
@@ -235,11 +243,11 @@ func NewService(cfg config.ServerCommonConf) (svr *Service, err error) {
 	}
 
 	// Listen for accepting connections from client using websocket protocol.
-	websocketPrefix := []byte("GET " + frpNet.FrpWebsocketPath)
+	websocketPrefix := []byte("GET " + utilnet.FrpWebsocketPath)
 	websocketLn := svr.muxer.Listen(0, uint32(len(websocketPrefix)), func(data []byte) bool {
 		return bytes.Equal(data, websocketPrefix)
 	})
-	svr.websocketListener = frpNet.NewWebsocketListener(websocketLn)
+	svr.websocketListener = utilnet.NewWebsocketListener(websocketLn)
 
 	// Create http vhost muxer.
 	if cfg.VhostHTTPPort > 0 {
@@ -294,21 +302,16 @@ func NewService(cfg config.ServerCommonConf) (svr *Service, err error) {
 	// frp tls listener
 	svr.tlsListener = svr.muxer.Listen(2, 1, func(data []byte) bool {
 		// tls first byte can be 0x16 only when vhost https port is not same with bind port
-		return int(data[0]) == frpNet.FRPTLSHeadByte || int(data[0]) == 0x16
+		return int(data[0]) == utilnet.FRPTLSHeadByte || int(data[0]) == 0x16
 	})
 
 	// Create nat hole controller.
-	if cfg.BindUDPPort > 0 {
-		var nc *nathole.Controller
-		address := net.JoinHostPort(cfg.BindAddr, strconv.Itoa(cfg.BindUDPPort))
-		nc, err = nathole.NewController(address, []byte(cfg.Token))
-		if err != nil {
-			err = fmt.Errorf("create nat hole controller error, %v", err)
-			return
-		}
-		svr.rc.NatHoleController = nc
-		log.Info("nat hole udp service listen on %s", address)
+	nc, err := nathole.NewController(time.Duration(cfg.NatHoleAnalysisDataReserveHours) * time.Hour)
+	if err != nil {
+		err = fmt.Errorf("create nat hole controller error, %v", err)
+		return
 	}
+	svr.rc.NatHoleController = nc
 
 	var statsEnable bool
 	// Create dashboard web server.
@@ -335,21 +338,23 @@ func NewService(cfg config.ServerCommonConf) (svr *Service, err error) {
 }
 
 func (svr *Service) Run() {
-	if svr.rc.NatHoleController != nil {
-		go svr.rc.NatHoleController.Run()
-	}
 	if svr.kcpListener != nil {
 		go svr.HandleListener(svr.kcpListener)
 	}
 	if svr.quicListener != nil {
 		go svr.HandleQUICListener(svr.quicListener)
 	}
-
 	go svr.HandleListener(svr.websocketListener)
 	go svr.HandleListener(svr.tlsListener)
 
 	svr.Closed = false
 	svr.HandleListener(svr.listener)
+
+	if svr.rc.NatHoleController != nil {
+		go svr.rc.NatHoleController.CleanWorker(svr.ctx)
+	}
+	svr.HandleListener(svr.listener)
+}
 }
 
 func closeListener(listeners ...net.Listener) (err error) {
@@ -366,7 +371,7 @@ func closeListener(listeners ...net.Listener) (err error) {
 	return nil
 }
 
-// Stop 停止服务
+// Stop
 func (svr *Service) Stop() (err error) {
 	if err = closeListener(svr.listener, svr.kcpListener, svr.websocketListener, svr.listener); err != nil {
 		return err
@@ -376,6 +381,29 @@ func (svr *Service) Stop() (err error) {
 	svr.rc.TCPPortManager.Stop()
 	svr.rc.UDPPortManager.Stop()
 	return err
+}
+
+
+func (svr *Service) Close() error {
+	if svr.kcpListener != nil {
+		svr.kcpListener.Close()
+	}
+	if svr.quicListener != nil {
+		svr.quicListener.Close()
+	}
+	if svr.websocketListener != nil {
+		svr.websocketListener.Close()
+	}
+	if svr.tlsListener != nil {
+		svr.tlsListener.Close()
+	}
+	if svr.listener != nil {
+		svr.listener.Close()
+	}
+	svr.cancel()
+
+	svr.ctlManager.Close()
+	return nil
 }
 
 func (svr *Service) handleConnection(ctx context.Context, conn net.Conn) {
@@ -453,12 +481,12 @@ func (svr *Service) HandleListener(l net.Listener) {
 		xl := xlog.New()
 		ctx := context.Background()
 
-		c = frpNet.NewContextConn(xlog.NewContext(ctx, xl), c)
+		c = utilnet.NewContextConn(xlog.NewContext(ctx, xl), c)
 
 		log.Trace("start check TLS connection...")
 		originConn := c
 		var isTLS, custom bool
-		c, isTLS, custom, err = frpNet.CheckAndEnableTLSServerConnWithTimeout(c, svr.tlsConfig, svr.cfg.TLSOnly, connReadTimeout)
+		c, isTLS, custom, err = utilnet.CheckAndEnableTLSServerConnWithTimeout(c, svr.tlsConfig, svr.cfg.TLSOnly, connReadTimeout)
 		if err != nil {
 			log.Warn("CheckAndEnableTLSServerConnWithTimeout error: %v", err)
 			originConn.Close()
@@ -512,7 +540,7 @@ func (svr *Service) HandleQUICListener(l quic.Listener) {
 					_ = frpConn.CloseWithError(0, "")
 					return
 				}
-				go svr.handleConnection(ctx, frpNet.QuicStreamToNetConn(stream, frpConn))
+				go svr.handleConnection(ctx, utilnet.QuicStreamToNetConn(stream, frpConn))
 			}
 		}(context.Background(), c)
 	}
@@ -528,7 +556,7 @@ func (svr *Service) RegisterControl(ctlConn net.Conn, loginMsg *msg.Login) (err 
 		}
 	}
 
-	ctx := frpNet.NewContextFromConn(ctlConn)
+	ctx := utilnet.NewContextFromConn(ctlConn)
 	xl := xlog.FromContextSafe(ctx)
 	xl.AppendPrefix(loginMsg.RunID)
 	ctx = xlog.NewContext(ctx, xl)
@@ -566,7 +594,7 @@ func (svr *Service) RegisterControl(ctlConn net.Conn, loginMsg *msg.Login) (err 
 
 // RegisterWorkConn register a new work connection to control and proxies need it.
 func (svr *Service) RegisterWorkConn(workConn net.Conn, newMsg *msg.NewWorkConn) error {
-	xl := frpNet.NewLogFromConn(workConn)
+	xl := utilnet.NewLogFromConn(workConn)
 	ctl, exist := svr.ctlManager.GetByID(newMsg.RunID)
 	if !exist {
 		xl.Warn("No client control found for run id [%s]", newMsg.RunID)

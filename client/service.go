@@ -39,7 +39,7 @@ import (
 	"frp_lib/pkg/msg"
 	"frp_lib/pkg/transport"
 	"frp_lib/pkg/util/log"
-	frpNet "frp_lib/pkg/util/net"
+	utilnet "frp_lib/pkg/util/net"
 	"frp_lib/pkg/util/util"
 	"frp_lib/pkg/util/version"
 	"frp_lib/pkg/util/xlog"
@@ -75,9 +75,6 @@ type Service struct {
 	// The configuration file used to initialize this client, or an empty
 	// string if no configuration file was used.
 	cfgFile string
-
-	// This is configured by the login response from frps
-	serverUDPPort int
 
 	exit uint32 // 0 means not exit
 
@@ -160,7 +157,7 @@ func (svr *Service) Run(isCmd bool) error {
 			util.RandomSleep(10*time.Second, 0.9, 1.1)
 		} else {
 			// login success
-			ctl := NewControl(svr.ctx, svr.runID, conn, cm, svr.cfg, svr.pxyCfgs, svr.visitorCfgs, svr.serverUDPPort, svr.authSetter)
+			ctl := NewControl(svr.ctx, svr.runID, conn, cm, svr.cfg, svr.pxyCfgs, svr.visitorCfgs, svr.authSetter)
 			ctl.Run()
 			svr.ctlMu.Lock()
 			svr.ctl = ctl
@@ -265,7 +262,7 @@ func (svr *Service) keepControllerWorking() {
 			// reconnect success, init delayTime
 			delayTime = time.Second
 
-			ctl := NewControl(svr.ctx, svr.runID, conn, cm, svr.cfg, svr.pxyCfgs, svr.visitorCfgs, svr.serverUDPPort, svr.authSetter)
+			ctl := NewControl(svr.ctx, svr.runID, conn, cm, svr.cfg, svr.pxyCfgs, svr.visitorCfgs, svr.authSetter)
 			ctl.Run()
 			svr.ctlMu.Lock()
 			if svr.ctl != nil {
@@ -337,8 +334,7 @@ func (svr *Service) login() (conn net.Conn, cm *ConnectionManager, err error) {
 	xl.ResetPrefixes()
 	xl.AppendPrefix(svr.runID)
 
-	svr.serverUDPPort = loginRespMsg.ServerUDPPort
-	xl.Info("login to server success, get run id [%s], server udp port [%d]", loginRespMsg.RunID, loginRespMsg.ServerUDPPort)
+	xl.Info("login to server success, get run id [%s]", loginRespMsg.RunID)
 	return
 }
 
@@ -420,7 +416,8 @@ func (cm *ConnectionManager) OpenConnection() error {
 		}
 		tlsConfig.NextProtos = []string{"frp"}
 
-		conn, err := quic.DialAddr(
+		conn, err := quic.DialAddrContext(
+			cm.ctx,
 			net.JoinHostPort(cm.cfg.ServerAddr, strconv.Itoa(cm.cfg.ServerPort)),
 			tlsConfig, &quic.Config{
 				MaxIdleTimeout:     time.Duration(cm.cfg.QUICMaxIdleTimeout) * time.Second,
@@ -460,7 +457,7 @@ func (cm *ConnectionManager) Connect() (net.Conn, error) {
 		if err != nil {
 			return nil, err
 		}
-		return frpNet.QuicStreamToNetConn(stream, cm.quicConn), nil
+		return utilnet.QuicStreamToNetConn(stream, cm.quicConn), nil
 	} else if cm.muxSession != nil {
 		stream, err := cm.muxSession.OpenStream()
 		if err != nil {
@@ -502,7 +499,7 @@ func (cm *ConnectionManager) realConnect() (net.Conn, error) {
 	protocol := cm.cfg.Protocol
 	if protocol == "websocket" {
 		protocol = "tcp"
-		dialOptions = append(dialOptions, libdial.WithAfterHook(libdial.AfterHook{Hook: frpNet.DialHookWebsocket()}))
+		dialOptions = append(dialOptions, libdial.WithAfterHook(libdial.AfterHook{Hook: utilnet.DialHookWebsocket()}))
 	}
 	if cm.cfg.ConnectServerLocalIP != "" {
 		dialOptions = append(dialOptions, libdial.WithLocalAddr(cm.cfg.ConnectServerLocalIP))
@@ -515,10 +512,11 @@ func (cm *ConnectionManager) realConnect() (net.Conn, error) {
 		libdial.WithProxyAuth(auth),
 		libdial.WithTLSConfig(tlsConfig),
 		libdial.WithAfterHook(libdial.AfterHook{
-			Hook: frpNet.DialHookCustomTLSHeadByte(tlsConfig != nil, cm.cfg.DisableCustomTLSFirstByte),
+			Hook: utilnet.DialHookCustomTLSHeadByte(tlsConfig != nil, cm.cfg.DisableCustomTLSFirstByte),
 		}),
 	)
-	conn, err := libdial.Dial(
+	conn, err := libdial.DialContext(
+		cm.ctx,
 		net.JoinHostPort(cm.cfg.ServerAddr, strconv.Itoa(cm.cfg.ServerPort)),
 		dialOptions...,
 	)

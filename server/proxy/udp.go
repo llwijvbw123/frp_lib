@@ -23,14 +23,14 @@ import (
 	"time"
 
 	"github.com/fatedier/golib/errors"
-	frpIo "github.com/fatedier/golib/io"
+	libio "github.com/fatedier/golib/io"
 	"golang.org/x/time/rate"
 
 	"frp_lib/pkg/config"
 	"frp_lib/pkg/msg"
 	"frp_lib/pkg/proto/udp"
 	"frp_lib/pkg/util/limit"
-	frpNet "frp_lib/pkg/util/net"
+	utilnet "frp_lib/pkg/util/net"
 	"frp_lib/server/metrics"
 )
 
@@ -124,7 +124,7 @@ func (pxy *UDPProxy) Run() (remoteAddr string, err error) {
 					pxy.readCh <- m
 					metrics.Server.AddTrafficOut(
 						pxy.GetName(),
-						pxy.GetConf().GetBaseInfo().ProxyType,
+						pxy.GetConf().GetBaseConfig().ProxyType,
 						int64(len(m.Content)),
 					)
 				}); errRet != nil {
@@ -154,7 +154,7 @@ func (pxy *UDPProxy) Run() (remoteAddr string, err error) {
 				xl.Trace("send message to udp workConn: %s", udpMsg.Content)
 				metrics.Server.AddTrafficIn(
 					pxy.GetName(),
-					pxy.GetConf().GetBaseInfo().ProxyType,
+					pxy.GetConf().GetBaseConfig().ProxyType,
 					int64(len(udpMsg.Content)),
 				)
 				continue
@@ -189,7 +189,7 @@ func (pxy *UDPProxy) Run() (remoteAddr string, err error) {
 
 			var rwc io.ReadWriteCloser = workConn
 			if pxy.cfg.UseEncryption {
-				rwc, err = frpIo.WithEncryption(rwc, []byte(pxy.serverCfg.Token))
+				rwc, err = libio.WithEncryption(rwc, []byte(pxy.serverCfg.Token))
 				if err != nil {
 					xl.Error("create encryption stream error: %v", err)
 					workConn.Close()
@@ -197,16 +197,16 @@ func (pxy *UDPProxy) Run() (remoteAddr string, err error) {
 				}
 			}
 			if pxy.cfg.UseCompression {
-				rwc = frpIo.WithCompression(rwc)
+				rwc = libio.WithCompression(rwc)
 			}
 
 			if pxy.GetLimiter() != nil {
-				rwc = frpIo.WrapReadWriteCloser(limit.NewReader(rwc, pxy.GetLimiter()), limit.NewWriter(rwc, pxy.GetLimiter()), func() error {
+				rwc = libio.WrapReadWriteCloser(limit.NewReader(rwc, pxy.GetLimiter()), limit.NewWriter(rwc, pxy.GetLimiter()), func() error {
 					return rwc.Close()
 				})
 			}
 
-			pxy.workConn = frpNet.WrapReadWriteCloserToConn(rwc, workConn)
+			pxy.workConn = utilnet.WrapReadWriteCloserToConn(rwc, workConn)
 			ctx, cancel := context.WithCancel(context.Background())
 			go workConnReaderFn(pxy.workConn)
 			go workConnSenderFn(pxy.workConn, ctx)

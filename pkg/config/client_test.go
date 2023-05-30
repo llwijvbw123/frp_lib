@@ -500,8 +500,10 @@ func Test_LoadClientBasicConf(t *testing.T) {
 				},
 				BandwidthLimitMode: BandwidthLimitModeClient,
 			},
-			Role: "server",
-			Sk:   "abcdefg",
+			RoleServerCommonConf: RoleServerCommonConf{
+				Role: "server",
+				Sk:   "abcdefg",
+			},
 		},
 		testUser + ".p2p_tcp": &XTCPProxyConf{
 			BaseProxyConf: BaseProxyConf{
@@ -513,8 +515,10 @@ func Test_LoadClientBasicConf(t *testing.T) {
 				},
 				BandwidthLimitMode: BandwidthLimitModeClient,
 			},
-			Role: "server",
-			Sk:   "abcdefg",
+			RoleServerCommonConf: RoleServerCommonConf{
+				Role: "server",
+				Sk:   "abcdefg",
+			},
 		},
 		testUser + ".tcpmuxhttpconnect": &TCPMuxProxyConf{
 			BaseProxyConf: BaseProxyConf{
@@ -661,6 +665,10 @@ func Test_LoadClientBasicConf(t *testing.T) {
 				BindAddr:   "127.0.0.1",
 				BindPort:   9001,
 			},
+			Protocol:          "quic",
+			MaxRetriesAnHour:  8,
+			MinRetryInterval:  90,
+			FallbackTimeoutMs: 1000,
 		},
 	}
 

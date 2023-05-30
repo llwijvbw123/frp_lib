@@ -23,14 +23,14 @@ import (
 	"sync"
 	"time"
 
-	frpIo "github.com/fatedier/golib/io"
+	libio "github.com/fatedier/golib/io"
 	"golang.org/x/time/rate"
 
 	"frp_lib/pkg/config"
 	"frp_lib/pkg/msg"
 	plugin "frp_lib/pkg/plugin/server"
 	"frp_lib/pkg/util/limit"
-	frpNet "frp_lib/pkg/util/net"
+	utilnet "frp_lib/pkg/util/net"
 	"frp_lib/pkg/util/xlog"
 	"frp_lib/server/controller"
 	"frp_lib/server/metrics"
@@ -113,7 +113,7 @@ func (pxy *BaseProxy) GetWorkConnFromPool(src, dst net.Addr) (workConn net.Conn,
 		}
 		xl.Debug("get a new work connection: [%s]", workConn.RemoteAddr().String())
 		xl.Spawn().AppendPrefix(pxy.GetName())
-		workConn = frpNet.NewContextConn(pxy.ctx, workConn)
+		workConn = utilnet.NewContextConn(pxy.ctx, workConn)
 
 		var (
 			srcAddr    string
@@ -156,7 +156,7 @@ func (pxy *BaseProxy) GetWorkConnFromPool(src, dst net.Addr) (workConn net.Conn,
 }
 
 // startListenHandler start a goroutine handler for each listener.
-// p: p will just be passed to handler(Proxy, frpNet.Conn).
+// p: p will just be passed to handler(Proxy, utilnet.Conn).
 // handler: each proxy type can set different handler function to deal with connections accepted from listeners.
 func (pxy *BaseProxy) startListenHandler(p Proxy, handler func(Proxy, net.Conn, config.ServerCommonConf)) {
 	xl := xlog.FromContextSafe(pxy.ctx)
@@ -196,16 +196,16 @@ func (pxy *BaseProxy) startListenHandler(p Proxy, handler func(Proxy, net.Conn, 
 func NewProxy(ctx context.Context, userInfo plugin.UserInfo, rc *controller.ResourceController, poolCount int,
 	getWorkConnFn GetWorkConnFn, pxyConf config.ProxyConf, serverCfg config.ServerCommonConf, loginMsg *msg.Login,
 ) (pxy Proxy, err error) {
-	xl := xlog.FromContextSafe(ctx).Spawn().AppendPrefix(pxyConf.GetBaseInfo().ProxyName)
+	xl := xlog.FromContextSafe(ctx).Spawn().AppendPrefix(pxyConf.GetBaseConfig().ProxyName)
 
 	var limiter *rate.Limiter
-	limitBytes := pxyConf.GetBaseInfo().BandwidthLimit.Bytes()
-	if limitBytes > 0 && pxyConf.GetBaseInfo().BandwidthLimitMode == config.BandwidthLimitModeServer {
+	limitBytes := pxyConf.GetBaseConfig().BandwidthLimit.Bytes()
+	if limitBytes > 0 && pxyConf.GetBaseConfig().BandwidthLimitMode == config.BandwidthLimitModeServer {
 		limiter = rate.NewLimiter(rate.Limit(float64(limitBytes)), int(limitBytes))
 	}
 
 	basePxy := BaseProxy{
-		name:          pxyConf.GetBaseInfo().ProxyName,
+		name:          pxyConf.GetBaseConfig().ProxyName,
 		rc:            rc,
 		listeners:     make([]net.Listener, 0),
 		poolCount:     poolCount,
@@ -277,7 +277,7 @@ func HandleUserTCPConnection(pxy Proxy, userConn net.Conn, serverCfg config.Serv
 	content := &plugin.NewUserConnContent{
 		User:       pxy.GetUserInfo(),
 		ProxyName:  pxy.GetName(),
-		ProxyType:  pxy.GetConf().GetBaseInfo().ProxyType,
+		ProxyType:  pxy.GetConf().GetBaseConfig().ProxyType,
 		RemoteAddr: userConn.RemoteAddr().String(),
 	}
 	_, err := rc.PluginManager.NewUserConn(content)
@@ -294,21 +294,21 @@ func HandleUserTCPConnection(pxy Proxy, userConn net.Conn, serverCfg config.Serv
 	defer workConn.Close()
 
 	var local io.ReadWriteCloser = workConn
-	cfg := pxy.GetConf().GetBaseInfo()
+	cfg := pxy.GetConf().GetBaseConfig()
 	xl.Trace("handler user tcp connection, use_encryption: %t, use_compression: %t", cfg.UseEncryption, cfg.UseCompression)
 	if cfg.UseEncryption {
-		local, err = frpIo.WithEncryption(local, []byte(serverCfg.Token))
+		local, err = libio.WithEncryption(local, []byte(serverCfg.Token))
 		if err != nil {
 			xl.Error("create encryption stream error: %v", err)
 			return
 		}
 	}
 	if cfg.UseCompression {
-		local = frpIo.WithCompression(local)
+		local = libio.WithCompression(local)
 	}
 
 	if pxy.GetLimiter() != nil {
-		local = frpIo.WrapReadWriteCloser(limit.NewReader(local, pxy.GetLimiter()), limit.NewWriter(local, pxy.GetLimiter()), func() error {
+		local = libio.WrapReadWriteCloser(limit.NewReader(local, pxy.GetLimiter()), limit.NewWriter(local, pxy.GetLimiter()), func() error {
 			return local.Close()
 		})
 	}
@@ -317,9 +317,9 @@ func HandleUserTCPConnection(pxy Proxy, userConn net.Conn, serverCfg config.Serv
 		workConn.RemoteAddr().String(), userConn.LocalAddr().String(), userConn.RemoteAddr().String())
 
 	name := pxy.GetName()
-	proxyType := pxy.GetConf().GetBaseInfo().ProxyType
+	proxyType := pxy.GetConf().GetBaseConfig().ProxyType
 	metrics.Server.OpenConnection(name, proxyType)
-	inCount, outCount, _ := frpIo.Join(local, userConn)
+	inCount, outCount, _ := libio.Join(local, userConn)
 	metrics.Server.CloseConnection(name, proxyType)
 	metrics.Server.AddTrafficIn(name, proxyType, inCount)
 	metrics.Server.AddTrafficOut(name, proxyType, outCount)

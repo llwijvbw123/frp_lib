@@ -26,14 +26,21 @@ import (
 	"github.com/fatedier/golib/crypto"
 
 	"frp_lib/client/proxy"
+	"frp_lib/client/visitor"
 	"frp_lib/pkg/auth"
 	"frp_lib/pkg/config"
 	"frp_lib/pkg/msg"
+	"frp_lib/pkg/transport"
 	"frp_lib/pkg/util/xlog"
 )
 
 type Control struct {
-	// uniq id got from frps, attach it in loginMsg
+	// service context
+	ctx context.Context
+	xl  *xlog.Logger
+
+	// Unique ID obtained from frps.
+	// It should be attached to the login message when reconnecting.
 	runID string
 
 	// manage all proxies
@@ -41,7 +48,7 @@ type Control struct {
 	pm      *proxy.Manager
 
 	// manage all visitors
-	vm *VisitorManager
+	vm *visitor.Manager
 
 	// control connection
 	conn net.Conn
@@ -69,17 +76,11 @@ type Control struct {
 	writerShutdown     *shutdown.Shutdown
 	msgHandlerShutdown *shutdown.Shutdown
 
-	// The UDP port that the server is listening on
-	serverUDPPort int
-
 	ProxyFunc func(err error)
-	xl        *xlog.Logger
-
-	// service context
-	ctx context.Context
-
 	// sets authentication based on selected method
 	authSetter auth.Setter
+
+	msgTransporter transport.MessageTransporter
 }
 
 func NewControl(
@@ -87,11 +88,12 @@ func NewControl(
 	clientCfg config.ClientCommonConf,
 	pxyCfgs map[string]config.ProxyConf,
 	visitorCfgs map[string]config.VisitorConf,
-	serverUDPPort int,
 	authSetter auth.Setter,
 ) *Control {
 	// new xlog instance
 	ctl := &Control{
+		ctx:                ctx,
+		xl:                 xlog.FromContextSafe(ctx),
 		runID:              runID,
 		conn:               conn,
 		cm:                 cm,
@@ -104,14 +106,12 @@ func NewControl(
 		readerShutdown:     shutdown.New(),
 		writerShutdown:     shutdown.New(),
 		msgHandlerShutdown: shutdown.New(),
-		serverUDPPort:      serverUDPPort,
-		xl:                 xlog.FromContextSafe(ctx),
-		ctx:                ctx,
 		authSetter:         authSetter,
 	}
-	ctl.pm = proxy.NewManager(ctl.ctx, ctl.sendCh, clientCfg, serverUDPPort)
+	ctl.msgTransporter = transport.NewMessageTransporter(ctl.sendCh)
+	ctl.pm = proxy.NewManager(ctl.ctx, clientCfg, ctl.msgTransporter)
 
-	ctl.vm = NewVisitorManager(ctl.ctx, ctl)
+	ctl.vm = visitor.NewManager(ctl.ctx, ctl.runID, ctl.clientCfg, ctl.connectServer, ctl.msgTransporter)
 	ctl.vm.Reload(visitorCfgs)
 	return ctl
 }
@@ -178,6 +178,16 @@ func (ctl *Control) HandleNewProxyResp(inMsg *msg.NewProxyResp) {
 	}
 }
 
+func (ctl *Control) HandleNatHoleResp(inMsg *msg.NatHoleResp) {
+	xl := ctl.xl
+
+	// Dispatch the NatHoleResp message to the related proxy.
+	ok := ctl.msgTransporter.DispatchWithType(inMsg, msg.TypeNameNatHoleResp, inMsg.TransactionID)
+	if !ok {
+		xl.Trace("dispatch NatHoleResp message to related proxy error")
+	}
+}
+
 func (ctl *Control) Close() error {
 	return ctl.GracefulClose(0)
 }
@@ -205,7 +215,7 @@ func (ctl *Control) GracefulClose(d time.Duration) error {
 	return nil
 }
 
-// ClosedDoneCh returns a channel which will be closed after all resources are released
+// ClosedDoneCh returns a channel that will be closed after all resources are released
 func (ctl *Control) ClosedDoneCh() <-chan struct{} {
 	return ctl.closedDoneCh
 }
@@ -267,7 +277,7 @@ func (ctl *Control) writer() {
 	}
 }
 
-// msgHandler handles all channel events and do corresponding operations.
+// msgHandler handles all channel events and performs corresponding operations.
 func (ctl *Control) msgHandler() {
 	xl := ctl.xl
 	defer func() {
@@ -324,6 +334,8 @@ func (ctl *Control) msgHandler() {
 				go ctl.HandleReqWorkConn(m)
 			case *msg.NewProxyResp:
 				ctl.HandleNewProxyResp(m)
+			case *msg.NatHoleResp:
+				ctl.HandleNatHoleResp(m)
 			case *msg.Pong:
 				if m.Error != "" {
 					xl.Error("Pong contains error: %s", m.Error)
