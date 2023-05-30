@@ -1,4 +1,3 @@
-
 # frp
 
 [![GitHub release](https://img.shields.io/github/tag/Bellegar/frp_lib.svg?label=release)](https://github.com/Bellegar/frp_lib/releases)
@@ -510,7 +509,7 @@ Enable dashboard first, then configure `enable_prometheus = true` in `frps.ini`.
 
 ### Authenticating the Client
 
-There are 2 authentication methods to authenticate frpc with frps. 
+There are 2 authentication methods to authenticate frpc with frps.
 
 You can decide which one to use by configuring `authentication_method` under `[common]` in `frpc.ini` and `frps.ini`.
 
