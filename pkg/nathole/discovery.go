@@ -21,7 +21,7 @@ import (
 
 	"github.com/pion/stun"
 
-	"github.com/fatedier/frp/pkg/msg"
+	"frp_lib/pkg/msg"
 )
 
 var responseTimeout = 3 * time.Second

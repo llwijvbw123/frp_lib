@@ -22,7 +22,7 @@ import (
 	"github.com/fatedier/golib/crypto"
 	"github.com/pion/stun"
 
-	"github.com/fatedier/frp/pkg/msg"
+	"frp_lib/pkg/msg"
 )
 
 func EncodeMessage(m msg.Message, key []byte) ([]byte, error) {
