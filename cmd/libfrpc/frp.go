@@ -13,6 +13,12 @@ package main
 
 typedef void (*LogListener) (const char* log);
 extern DllExport void setLogListener(LogListener l);
+
+typedef void (*FrpcClosedCallback)(const char* msg);
+extern DllExport void setFrpcClosedCallback(FrpcClosedCallback l);
+
+typedef void (*ProxyFailedCallback)();
+extern DllExport void setProxyFailedCallback(ProxyFailedCallback l);
 */
 import "C"
 

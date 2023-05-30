@@ -148,6 +148,7 @@ var rootCmd = &cobra.Command{
 var cmd bool
 
 var service *client.Service
+var commonCfg config.ClientCommonConf
 
 func Execute() {
 	cmd = true
@@ -190,6 +191,35 @@ func StopFrp() (err error) {
 
 func IsFrpRunning() bool {
 	return service != nil && !service.IsClosed()
+}
+
+func ReloadFrpc() (err error) {
+	if service == nil {
+		return fmt.Errorf("frp not start")
+	}
+	return reload(commonCfg)
+}
+
+func SetServiceProxyFailedFunc(proxyFailedFunc func(err error)) {
+	if service != nil {
+		service.SetProxyFailedFunc(proxyFailedFunc)
+	}
+}
+
+type ServiceClosedListener interface {
+	OnClosed(msg string)
+}
+
+func SetServiceOnCloseListener(listener ServiceClosedListener) {
+	if service != nil {
+		service.SetOnCloseListener(listener)
+	}
+}
+
+func SetServiceReConnectByCount(reConnectByCount bool) {
+	if service != nil {
+		service.ReConnectByCount = reConnectByCount
+	}
 }
 
 func handleSignal(svr *client.Service, doneCh chan struct{}) {
@@ -263,6 +293,7 @@ func startService(
 		return
 	}
 	service = svr
+	commonCfg = cfg
 
 	closedDoneCh := make(chan struct{})
 	shouldGracefulClose := cfg.Protocol == "kcp" || cfg.Protocol == "quic"

@@ -25,13 +25,6 @@ void callback(const char* log) {
 	}
 }
 
-void cListener(const char* log) {
-	printf("%s", log);
-}
-
-void testLog() {
-	setLogListener(cListener);
-}
 */
 import "C"
 import (
@@ -59,7 +52,6 @@ func init() {
 	log.AppendListener(&l)
 }
 
-func logLog() {
-	C.testLog()
-	println(C.logListener)
+func LogPrint(err error) {
+	log.Error(err.Error())
 }
