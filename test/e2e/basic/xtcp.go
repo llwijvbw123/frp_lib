@@ -6,10 +6,10 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"github.com/fatedier/frp/test/e2e/framework"
-	"github.com/fatedier/frp/test/e2e/framework/consts"
-	"github.com/fatedier/frp/test/e2e/pkg/port"
-	"github.com/fatedier/frp/test/e2e/pkg/request"
+	"frp_lib/test/e2e/framework"
+	"frp_lib/test/e2e/framework/consts"
+	"frp_lib/test/e2e/pkg/port"
+	"frp_lib/test/e2e/pkg/request"
 )
 
 var _ = ginkgo.Describe("[Feature: XTCP]", func() {

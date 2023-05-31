@@ -24,11 +24,11 @@ import (
 	"github.com/fatedier/golib/errors"
 	libio "github.com/fatedier/golib/io"
 
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/msg"
-	"github.com/fatedier/frp/pkg/proto/udp"
-	"github.com/fatedier/frp/pkg/util/limit"
-	utilnet "github.com/fatedier/frp/pkg/util/net"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/proto/udp"
+	"frp_lib/pkg/util/limit"
+	utilnet "frp_lib/pkg/util/net"
 )
 
 func init() {

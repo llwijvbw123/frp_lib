@@ -29,13 +29,13 @@ import (
 	quic "github.com/quic-go/quic-go"
 	"golang.org/x/time/rate"
 
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/msg"
-	"github.com/fatedier/frp/pkg/nathole"
-	"github.com/fatedier/frp/pkg/transport"
-	utilnet "github.com/fatedier/frp/pkg/util/net"
-	"github.com/fatedier/frp/pkg/util/util"
-	"github.com/fatedier/frp/pkg/util/xlog"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/nathole"
+	"frp_lib/pkg/transport"
+	utilnet "frp_lib/pkg/util/net"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/xlog"
 )
 
 var ErrNoTunnelSession = errors.New("no tunnel session")

@@ -17,7 +17,7 @@ package proxy
 import (
 	"reflect"
 
-	"github.com/fatedier/frp/pkg/config"
+	"frp_lib/pkg/config"
 )
 
 func init() {

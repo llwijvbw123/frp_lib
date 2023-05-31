@@ -25,12 +25,12 @@ import (
 	"github.com/fatedier/golib/errors"
 	libio "github.com/fatedier/golib/io"
 
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/msg"
-	"github.com/fatedier/frp/pkg/proto/udp"
-	utilnet "github.com/fatedier/frp/pkg/util/net"
-	"github.com/fatedier/frp/pkg/util/util"
-	"github.com/fatedier/frp/pkg/util/xlog"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/msg"
+	"frp_lib/pkg/proto/udp"
+	utilnet "frp_lib/pkg/util/net"
+	"frp_lib/pkg/util/util"
+	"frp_lib/pkg/util/xlog"
 )
 
 type SUDPVisitor struct {

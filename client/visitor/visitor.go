@@ -19,10 +19,10 @@ import (
 	"net"
 	"sync"
 
-	"github.com/fatedier/frp/pkg/config"
-	"github.com/fatedier/frp/pkg/transport"
-	utilnet "github.com/fatedier/frp/pkg/util/net"
-	"github.com/fatedier/frp/pkg/util/xlog"
+	"frp_lib/pkg/config"
+	"frp_lib/pkg/transport"
+	utilnet "frp_lib/pkg/util/net"
+	"frp_lib/pkg/util/xlog"
 )
 
 // Helper wrapps some functions for visitor to use.

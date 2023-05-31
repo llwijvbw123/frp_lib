@@ -20,7 +20,7 @@ fmt-more:
 	gofumpt -l -w .
 
 gci:
-	gci write -s standard -s default -s "prefix(github.com/fatedier/frp/)" ./
+	gci write -s standard -s default -s "prefix(github.com/Bellegar/frp_lib/)" ./
 
 vet:
 	go vet ./...
@@ -77,7 +77,7 @@ e2e-trace:
 	DEBUG=true LOG_LEVEL=trace ./hack/run-e2e.sh
 
 alltest: vet gotest e2e
-	
+
 clean:
 	rm -f ./bin/frpc
 	rm -f ./bin/frps
