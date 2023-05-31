@@ -1,4 +1,4 @@
-# FRPS server app:
+# FRPS server app (not tested, i build frps from original fatedier's repo):
 $ make frps
 
 # FRPC library:
@@ -6,14 +6,13 @@ $ make frps
 
 Install mingw64 and add "bin" to PATH
 
-$ mingw32-make frpc-lib-windows
+$ mingw32-make frpc-lib-windows64
 
 ## windows x32:
 
 Install mingw (32bit) and add "bin" to PATH
 
-$ export GOARCH=386
-$ mingw32-make frpc-lib-windows
+$ mingw32-make frpc-lib-windows32
 
 ## macos:
 

@@ -19,6 +19,10 @@ func IsFrpcRunning() bool {
 	return frpc.IsFrpRunning()
 }
 
+func ReloadFrpc() bool {
+	return frpc.ReloadFrpc() != nil
+}
+
 // Version frp
 func Version() string {
 	return version.Full()
