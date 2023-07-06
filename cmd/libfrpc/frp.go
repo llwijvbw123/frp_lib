@@ -1,7 +1,8 @@
 package main
 
 /*
-#cgo darwin CFLAGS: -mmacosx-version-min=10.11
+#cgo darwin CFLAGS: -mmacosx-version-min=10.13
+#cgo darwin LDFLAGS: -mmacosx-version-min=10.13
 
 #ifndef DllExport
 #ifdef WIN32

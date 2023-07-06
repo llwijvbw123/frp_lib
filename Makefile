@@ -32,10 +32,20 @@ frpc:
 	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/frpc ./cmd/frpc
 
 frpc-lib-static:
-	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-archive -o bin/ ./cmd/libfrpc
+	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-archive -o bin/static/ ./cmd/libfrpc
 
-frpc-lib-unix:
-	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/ ./cmd/libfrpc
+frpc-lib-static-macos:
+	env GOARCH=amd64 CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-archive -o bin/x86_64/libfrpc.a ./cmd/libfrpc
+	env GOARCH=arm64 CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-archive -o bin/arm64/libfrpc.a ./cmd/libfrpc
+	mkdir -p bin/arm64_fat
+	lipo -create bin/x86_64/libfrpc.a bin/arm64/libfrpc.a -output bin/arm64_fat/libfrpc.a
+	cp bin/x86_64/libfrpc.h bin/arm64_fat/libfrpc.h
+
+frpc-lib-unix-x64:
+	env GOARCH=amd64 CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/x86_64/ ./cmd/libfrpc
+
+frpc-lib-unix-arm64:
+	env GOARCH=arm64 CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/arm64/ ./cmd/libfrpc
 
 frpc-lib-windows64:
 	env CGO_ENABLED=1 go build -trimpath -ldflags "$(LDFLAGS) -extldflags=-static" -buildmode=c-shared -o bin/x86_64/frpc.dll ./cmd/libfrpc
