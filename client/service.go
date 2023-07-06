@@ -188,6 +188,7 @@ func (svr *Service) Run(ctx context.Context, isCmd bool) error {
 		// service context may not be canceled by svr.Close(), we should call it here to release resources
 		if atomic.LoadUint32(&svr.exit) == 0 {
 			svr.Close()
+		}
 		svr.closed = true
 		log.Info("svr closed")
 	} else {
@@ -196,6 +197,7 @@ func (svr *Service) Run(ctx context.Context, isCmd bool) error {
 			// service context may not be canceled by svr.Close(), we should call it here to release resources
 			if atomic.LoadUint32(&svr.exit) == 0 {
 				svr.Close()
+			}
 			svr.closed = true
 			log.Info("svr closed")
 

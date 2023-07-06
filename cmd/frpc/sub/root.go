@@ -335,10 +335,9 @@ func returnService(cfg config.ClientCommonConf, pxyCfgs map[string]config.ProxyC
 		return
 	}
 
-	kcpDoneCh := make(chan struct{})
 	// Capture the exit signal if we use kcp.
 	if cfg.Protocol == "kcp" {
-		go handleSignal(svr, kcpDoneCh)
+		go handleTermSignal(svr)
 	}
 
 	return svr, err
