@@ -16,7 +16,6 @@ func RunFrpc(cfgFilePath *C.char) C.int {
 	crypto.DefaultSalt = "frp"
 
 	if err := sub.RunFrpc(path); err != nil {
-		println(err.Error())
 		LogPrint(err)
 		return C.int(0)
 	}
@@ -28,7 +27,6 @@ func RunFrpc(cfgFilePath *C.char) C.int {
 //export ReloadFrpc
 func ReloadFrpc() C.int {
 	if err := sub.ReloadFrpc(); err != nil {
-		println(err.Error())
 		LogPrint(err)
 		return C.int(0)
 	}

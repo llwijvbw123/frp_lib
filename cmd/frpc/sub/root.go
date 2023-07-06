@@ -132,7 +132,7 @@ var rootCmd = &cobra.Command{
 var cmd bool
 
 var service *client.Service
-var commonCfg config.ClientCommonConf
+var cfgPath string
 
 func runMultipleClients(cfgDir string) error {
 	var wg sync.WaitGroup
@@ -163,6 +163,9 @@ func Execute() {
 }
 
 func RunFrpc(cfgFilePath string) (err error) {
+	if IsFrpRunning() {			
+		return fmt.Errorf("frp already started")
+	}
 	cmd = false
 	crypto.DefaultSalt = "frp"
 	return runClient(cfgFilePath)
@@ -184,8 +187,8 @@ func returnClient(cfgFilePath string) (svr *client.Service, err error) {
 }
 
 func StopFrp() (err error) {
-	if service == nil {
-		return fmt.Errorf("frp not start")
+	if !IsFrpRunning() {
+		return fmt.Errorf("frp not started")
 	}
 
 	service.Close()
@@ -199,10 +202,19 @@ func IsFrpRunning() bool {
 }
 
 func ReloadFrpc() (err error) {
-	if service == nil {
-		return fmt.Errorf("frp not start")
+	if !IsFrpRunning() {
+		return fmt.Errorf("frp not started")
 	}
-	return reload(commonCfg)
+	_, pxyCfgs, visitorCfgs, err := config.ParseClientConfig(cfgPath)
+	if err != nil {
+		return fmt.Errorf("reload frpc proxy config error: %s", err.Error())
+	}
+
+	if err = service.ReloadConf(pxyCfgs, visitorCfgs); err != nil {
+		return fmt.Errorf("reload frpc proxy config error: %s", err.Error())
+	}
+	log.Info("success reload conf")
+	return nil;
 }
 
 func SetServiceProxyFailedFunc(proxyFailedFunc func(err error)) {
@@ -300,7 +312,7 @@ func startService(
 		return
 	}
 	service = svr
-	commonCfg = cfg
+	cfgPath = cfgFile
 
 	shouldGracefulClose := cfg.Protocol == "kcp" || cfg.Protocol == "quic"
 	// Capture the exit signal if we use kcp or quic.
@@ -335,8 +347,9 @@ func returnService(cfg config.ClientCommonConf, pxyCfgs map[string]config.ProxyC
 		return
 	}
 
+	shouldGracefulClose := cfg.Protocol == "kcp" || cfg.Protocol == "quic"
 	// Capture the exit signal if we use kcp.
-	if cfg.Protocol == "kcp" {
+	if shouldGracefulClose {
 		go handleTermSignal(svr)
 	}
 
