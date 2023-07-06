@@ -1,19 +1,12 @@
-## Notes
+### Features
 
-We have thoroughly refactored xtcp in this version to improve its penetration rate and stability.
+* frpc supports connecting to frps via the wss protocol by enabling the configuration `protocol = wss`.
+* frpc supports stopping the service through the stop command.
 
-In this version, different penetration strategies can be attempted by retrying connections multiple times. Once a hole is successfully punched, the strategy will be recorded in the server cache for future reuse. When new users connect, the successfully penetrated tunnel can be reused instead of punching a new hole.
+### Improvements
 
-**Due to a significant refactor of xtcp, this version is not compatible with previous versions of xtcp.**
+* service.Run supports passing in context.
 
-**To use features related to xtcp, both frpc and frps need to be updated to the latest version.**
+### Fixes
 
-### New
-
-* The frpc has added the `nathole discover` command for testing the NAT type of the current network.
-* `XTCP` has been refactored, resulting in a significant improvement in the success rate of penetration.
-* When verifying passwords, use `subtle.ConstantTimeCompare` and introduce a certain delay when the password is incorrect.
-
-### Fix
-
-* Fix the problem of lagging when opening multiple table entries in the frps dashboard.
+* Fix an issue caused by a bug in yamux that prevents wss from working properly in certain plugins.

@@ -523,7 +523,7 @@ func (ctl *Control) manager() {
 }
 
 func (ctl *Control) HandleNatHoleVisitor(m *msg.NatHoleVisitor) {
-	ctl.rc.NatHoleController.HandleVisitor(m, ctl.msgTransporter)
+	ctl.rc.NatHoleController.HandleVisitor(m, ctl.msgTransporter, ctl.loginMsg.User)
 }
 
 func (ctl *Control) HandleNatHoleClient(m *msg.NatHoleClient) {
@@ -536,7 +536,7 @@ func (ctl *Control) HandleNatHoleReport(m *msg.NatHoleReport) {
 
 func (ctl *Control) RegisterProxy(pxyMsg *msg.NewProxy) (remoteAddr string, err error) {
 	var pxyConf config.ProxyConf
-	// Load configures from NewProxy message and check.
+	// Load configures from NewProxy message and validate.
 	pxyConf, err = config.NewProxyConfFromMsg(pxyMsg, ctl.serverCfg)
 	if err != nil {
 		return
@@ -549,8 +549,8 @@ func (ctl *Control) RegisterProxy(pxyMsg *msg.NewProxy) (remoteAddr string, err 
 		RunID: ctl.runID,
 	}
 
-	// NewProxy will return a interface Proxy.
-	// In fact it create different proxies by different proxy type, we just call run() here.
+	// NewProxy will return an interface Proxy.
+	// In fact, it creates different proxies based on the proxy type. We just call run() here.
 	pxy, err := proxy.NewProxy(ctl.ctx, userInfo, ctl.rc, ctl.poolCount, ctl.GetWorkConn, pxyConf, ctl.serverCfg, ctl.loginMsg)
 	if err != nil {
 		return remoteAddr, err
@@ -574,6 +574,11 @@ func (ctl *Control) RegisterProxy(pxyMsg *msg.NewProxy) (remoteAddr string, err 
 				ctl.mu.Unlock()
 			}
 		}()
+	}
+
+	if ctl.pxyManager.Exist(pxyMsg.ProxyName) {
+		err = fmt.Errorf("proxy [%s] already exists", pxyMsg.ProxyName)
+		return
 	}
 
 	remoteAddr, err = pxy.Run()

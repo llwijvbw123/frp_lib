@@ -61,6 +61,7 @@ func (pxy *XTCPProxy) InWorkConn(conn net.Conn, startWorkConnMsg *msg.StartWorkC
 		return
 	}
 
+	xl.Trace("nathole prepare start")
 	prepareResult, err := nathole.Prepare([]string{pxy.clientCfg.NatHoleSTUNServer})
 	if err != nil {
 		xl.Warn("nathole prepare error: %v", err)
@@ -80,6 +81,7 @@ func (pxy *XTCPProxy) InWorkConn(conn net.Conn, startWorkConnMsg *msg.StartWorkC
 		AssistedAddrs: prepareResult.AssistedAddrs,
 	}
 
+	xl.Trace("nathole exchange info start")
 	natHoleRespMsg, err := nathole.ExchangeInfo(pxy.ctx, pxy.msgTransporter, transactionID, natHoleClientMsg, 5*time.Second)
 	if err != nil {
 		xl.Warn("nathole exchange info error: %v", err)
@@ -137,7 +139,7 @@ func (pxy *XTCPProxy) listenByKCP(listenConn *net.UDPConn, raddr *net.UDPAddr, s
 
 	fmuxCfg := fmux.DefaultConfig()
 	fmuxCfg.KeepAliveInterval = 10 * time.Second
-	fmuxCfg.MaxStreamWindowSize = 2 * 1024 * 1024
+	fmuxCfg.MaxStreamWindowSize = 6 * 1024 * 1024
 	fmuxCfg.LogOutput = io.Discard
 	session, err := fmux.Server(remote, fmuxCfg)
 	if err != nil {

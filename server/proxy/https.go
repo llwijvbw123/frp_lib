@@ -15,18 +15,32 @@
 package proxy
 
 import (
+	"reflect"
 	"strings"
-
-	"golang.org/x/time/rate"
 
 	"frp_lib/pkg/config"
 	"frp_lib/pkg/util/util"
 	"frp_lib/pkg/util/vhost"
 )
 
+func init() {
+	RegisterProxyFactory(reflect.TypeOf(&config.HTTPSProxyConf{}), NewHTTPSProxy)
+}
+
 type HTTPSProxy struct {
 	*BaseProxy
 	cfg *config.HTTPSProxyConf
+}
+
+func NewHTTPSProxy(baseProxy *BaseProxy, cfg config.ProxyConf) Proxy {
+	unwrapped, ok := cfg.(*config.HTTPSProxyConf)
+	if !ok {
+		return nil
+	}
+	return &HTTPSProxy{
+		BaseProxy: baseProxy,
+		cfg:       unwrapped,
+	}
 }
 
 func (pxy *HTTPSProxy) Run() (remoteAddr string, err error) {
@@ -67,17 +81,13 @@ func (pxy *HTTPSProxy) Run() (remoteAddr string, err error) {
 		addrs = append(addrs, util.CanonicalAddr(routeConfig.Domain, pxy.serverCfg.VhostHTTPSPort))
 	}
 
-	pxy.startListenHandler(pxy, HandleUserTCPConnection)
+	pxy.startCommonTCPListenersHandler()
 	remoteAddr = strings.Join(addrs, ",")
 	return
 }
 
 func (pxy *HTTPSProxy) GetConf() config.ProxyConf {
 	return pxy.cfg
-}
-
-func (pxy *HTTPSProxy) GetLimiter() *rate.Limiter {
-	return pxy.limiter
 }
 
 func (pxy *HTTPSProxy) Close() {
