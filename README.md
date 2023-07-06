@@ -1,17 +1,15 @@
 # frp
 
-[![GitHub release](https://img.shields.io/github/tag/Bellegar/frp_lib.svg?label=release)](https://github.com/Bellegar/frp_lib/releases)
-
 ## FRP Library
 The universal project for building shared library of FRP library on desktop and mobile platforms.
-Static library also can be build, but in my own FRP-depend windows c++ project execution of function was stucking, so static build does not work currently.
+Static library also can be build, and works well on macos, but in my windows vc++ project execution of function was stucking, so static build did not used on windows.
 
 Supported:
 * Windows 32bit (dll + lib, build with mingw32)
 * Windows 64bit (dll + lib, build with mingw64)
 * Android all archs (aar + jar sources)
 * Unix/Linux (not tested)
-* MacOS (not tested)
+* MacOS (x86_64+arm64 fat) (static lib tested)
 * iOS (not tested)
 
 [README](README.md) | [中文文档](README_zh.md)
