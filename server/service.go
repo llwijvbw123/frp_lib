@@ -363,7 +363,7 @@ func (svr *Service) Run(ctx context.Context) {
 		svr.Close()
 	}
 }
-}
+
 
 func closeListener(listeners ...net.Listener) (err error) {
 	for _, l := range listeners {
