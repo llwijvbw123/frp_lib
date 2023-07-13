@@ -1,5 +1,5 @@
 # compile for version
-make
+make frpc-lib-android
 if [ $? -ne 0 ]; then
     echo "make error"
     exit 1
