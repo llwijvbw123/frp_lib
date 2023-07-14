@@ -67,6 +67,7 @@ require (
 	golang.org/x/exp v0.0.0-20221205204356-47842c84f3db // indirect
 	//golang.org/x/mobile v0.0.0-20230427221453-e8d11dd0ba41 // indirect
 	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect 
+	golang.org/x/mobile/cmd/gomobile@latest // indirect 
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
